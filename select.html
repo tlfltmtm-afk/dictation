@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 거꾸로 받아쓰기 (범위 선택)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+        body {
+            font-family: 'Gowun Dodum', sans-serif;
+            background-color: #f7f3e9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        main {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px; 
+            margin: 20px auto;
+            padding: 40px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            color: #5cb85c;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            font-size: 1.1em;
+            color: #0275d8;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* --- 선택 영역 스타일 --- */
+        .selection-group {
+            margin-bottom: 30px;
+            text-align: left;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .selection-group label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .selection-group select {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1.1em;
+            font-family: 'Gowun Dodum', sans-serif;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            -webkit-appearance: none; /* 기본 드롭다운 스타일 제거 */
+            -moz-appearance: none;
+            appearance: none;
+            background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23444%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-25.2%200l-91.8%2091.8L78%2069.4c-6.8-6.8-17.6-6.8-25.4%200-6.8%206.8-6.8%2017.6%200%2025.4l104%20104c4.8%204.8%2011.8%206.8%2018.6%206.8s13.8-2%2018.6-6.8l104-104c6.8-6.8%206.8-17.6%200-25.4z%22%2F%3E%3C%2Fsvg%3E') no-repeat right 15px center;
+            background-size: 10px;
+        }
+        
+        /* 퀴즈 시작 버튼 */
+        #start-quiz-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.4em;
+            font-family: 'Gowun Dodum', sans-serif;
+            font-weight: bold;
+            color: #fff;
+            background-color: #f0ad4e; /* 주황색 계열 */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        #start-quiz-btn:hover {
+            background-color: #e89e3a;
+        }
+
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1>✍️ 퀴즈 범위 선택</h1>
+        <a href="index.html" class="back-btn">← 메인 화면으로 돌아가기</a>
+        
+        <p style="color:#d9534f; font-weight: bold;">
+            학습할 범위를 선택하고 실전 퀴즈를 시작하세요!
+        </p>
+
+        <div class="selection-group">
+            <label for="grade-select">학년/학기 선택 (필수)</label>
+            <select id="grade-select">
+                <option value="all">전체 학년/학기</option>
+            </select>
+        </div>
+
+        <div class="selection-group">
+            <label for="rule-select">규칙 선택 (선택)</label>
+            <select id="rule-select">
+                <option value="all">전체 규칙</option>
+            </select>
+        </div>
+
+        <button id="start-quiz-btn">🚀 퀴즈 시작!</button>
+    </main>
+
+    <script>
+        // --- CSV에서 추출된 데이터 (Python 분석 결과) ---
+        // 이 데이터를 기반으로 드롭다운을 채웁니다.
+
+        const GRADE_SEMESTERS = ['1학년 1학기', '1학년 2학기', '2학년 1학기', '2학년 2학기'];
+        
+        // 데이터베이스에서 추출된 29개의 고유 규칙 목록
+        const UNIQUE_RULES = [
+            '(규칙 없음)', "10번 (깜짝! 'ㄴ' 소리)", "10번(깜짝! 'ㄴ' 소리)", '11번(부끄럼쟁이 첫소리)', '12번 (단어 숨쉬기)', 
+            '14번 (소리와 표기 구분)', '1번 (연음)', '1번(연음)', '1번(이사 가는 받침)', '2번 (받침 대장)', 
+            '2번 (받침 대장)', '2번(받침 대장)', '4번 (짝꿍 소리)', '4번(짝꿍 소리)', '4번(힘센 소리)', 
+            '5번 ('이' 마법)', '5번(구개음화)', '6번 (거센소리)', '6번(거센소리)', '6번(거센소리 로봇)', 
+            '7번 (투명인간 ㅎ)', '7번(투명인간 ㅎ)', '7번(투명인간 ㅎ)', '8번 (모음 합체)', '9번 (깜짝! ㄴ 소리)', 
+            '9번(모음 합체)', '9번(ㄴ첨가)', '표기-발음 불일치', '힘센 소리'
+        ];
+        
+        // --- JavaScript 로직 ---
+
+        const gradeSelect = document.getElementById('grade-select');
+        const ruleSelect = document.getElementById('rule-select');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+
+        // 1. 드롭다운 채우기 함수
+        function populateDropdown(selectElement, optionsArray) {
+            optionsArray.forEach(option => {
+                const newOption = document.createElement('option');
+                newOption.value = option;
+                newOption.textContent = option;
+                selectElement.appendChild(newOption);
+            });
+        }
+
+        // 학년/학기 드롭다운 채우기
+        populateDropdown(gradeSelect, GRADE_SEMESTERS);
+        
+        // 규칙 드롭다운 채우기
+        // *주의*: 규칙 목록은 중복된 이름/형식이 있지만, DB에 있는 그대로를 보여주는 것이 정확한 필터링에 도움이 됩니다.
+        populateDropdown(ruleSelect, UNIQUE_RULES);
+
+
+        // 2. 퀴즈 시작 버튼 클릭 이벤트 핸들러
+        startQuizBtn.addEventListener('click', () => {
+            const selectedGrade = gradeSelect.value;
+            const selectedRule = ruleSelect.value;
+            
+            // 필수 선택 항목 확인 (Grade/Semester는 '전체'도 허용)
+            if (selectedGrade === "all" && selectedRule === "all") {
+                alert("전체 범위로 퀴즈를 시작합니다!");
+                // 실제 구현 시: window.location.href = `quiz.html?grade=all&rule=all`;
+            } else {
+                alert(`[선택 완료]\n- 학년/학기: ${selectedGrade === 'all' ? '전체' : selectedGrade}\n- 규칙: ${selectedRule === 'all' ? '전체' : selectedRule}\n\n이 조건으로 퀴즈를 시작합니다!`);
+                // 실제 구현 시: window.location.href = `quiz.html?grade=${selectedGrade}&rule=${selectedRule}`;
+            }
+            
+            // 프로토타입에서는 다음 페이지로 이동하는 대신 알림만 띄웁니다.
+        });
+    </script>
+
+</body>
+</html>
