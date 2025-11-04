@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>받아쓰기 나라: 되돌리기 학습 (문장편)</title>
+    <title>👑 거꾸로 받아쓰기 나라 (메인)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
         body {
             font-family: 'Gowun Dodum', sans-serif;
-            background-color: #f7f3e9;
+            background-color: #f7f3e9; /* 프로토타입과 동일한 배경색 */
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
             padding: 20px;
             box-sizing: border-box;
         }
@@ -24,285 +25,84 @@
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 700px; /* 문장을 표시하기 위해 너비 확장 */
-            padding: 30px;
+            max-width: 500px; /* 메인 화면은 너무 크지 않게 */
+            padding: 40px;
             box-sizing: border-box;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
-            color: #d9534f;
+            color: #d9534f; /* 메인 컬러 */
+            font-size: 2.2em;
             margin-top: 0;
-            font-size: 2em;
-        }
-
-        #quiz-container {
-            text-align: center;
-        }
-
-        /* 오디오 재생 버튼 */
-        #play-audio-btn {
-            font-family: 'Gowun Dodum', sans-serif;
-            font-size: 1.2em;
-            padding: 12px 25px;
-            background-color: #f0ad4e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
             margin-bottom: 20px;
-            font-weight: bold;
-        }
-        #play-audio-btn:hover {
-            background-color: #ec9b3b;
         }
 
-        /* [소리표기 문장] 힌트 */
-        #problem-sound-sentence {
-            font-size: 1.8em; /* 폰트 크기 조정 */
-            font-weight: bold;
-            color: #0275d8;
-            margin: 20px 0;
-            padding: 20px;
-            background-color: #f0f8ff;
-            border-radius: 10px;
-            line-height: 1.6;
-        }
-
-        label {
+        p {
             font-size: 1.2em;
-            display: block;
-            margin-bottom: 10px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 40px; /* 버튼과의 간격 */
         }
 
-        #user-answer {
-            width: 100%; /* 너비 100% */
-            padding: 15px;
-            font-size: 1.2em; /* 폰트 크기 조정 */
-            font-family: 'Gowun Dodum', sans-serif;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            box-sizing: border-box; /* 패딩 포함 */
-            text-align: center;
-        }
-
-        #action-button {
+        /* 네비게이션 버튼 스타일 */
+        nav a {
             display: block;
             width: 100%;
-            padding: 15px;
-            font-size: 1.3em;
+            padding: 20px;
+            margin-bottom: 15px; /* 버튼 사이 간격 */
+            
+            font-size: 1.5em;
             font-family: 'Gowun Dodum', sans-serif;
             font-weight: bold;
             color: #fff;
-            background-color: #5cb85c;
+            text-decoration: none;
+            
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
         }
 
-        #action-button:hover {
-            background-color: #4cae4c;
+        /* 버튼 1: 규칙 배우기 */
+        nav a.rules-btn {
+            background-color: #0275d8; /* 파란색 계열 */
         }
-
-        #action-button.next {
-            background-color: #0275d8;
-        }
-        #action-button.next:hover {
+        nav a.rules-btn:hover {
             background-color: #025aa5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-
-        #feedback-container {
-            margin-top: 30px;
-            border-top: 2px dashed #eee;
-            padding-top: 20px;
-            display: none; /* 초기에는 숨김 */
+        /* 버튼 2: 퀴즈 풀기 */
+        nav a.quiz-btn {
+            background-color: #5cb85c; /* 녹색 계열 */
+        }
+        nav a.quiz-btn:hover {
+            background-color: #4cae4c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        #feedback-result {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        #feedback-result.correct {
-            color: #5cb85c;
-        }
-
-        #feedback-result.wrong {
-            color: #d9534f;
-        }
-
-        #rule-explanation {
-            background-color: #fefbed;
-            border: 1px solid #f0e68c;
-            border-radius: 10px;
-            padding: 20px;
-            font-size: 1.1em;
-            line-height: 1.7;
-            text-align: left;
-        }
-
-        #rule-explanation strong {
-            color: #d9534f;
-        }
     </style>
 </head>
 <body>
 
     <main>
-        <h1>👑 받아쓰기 문장 퀴즈 👑</h1>
-        <div id="quiz-container">
-            <p style="font-size: 1.2em; color: #555;">오디오를 듣고, (소리 힌트)를 참고하여 (진짜 문장)을 적어보세요!</p>
-            
-            <button id="play-audio-btn">🎧 문장 듣기</button>
+        <h1>👑 거꾸로 받아쓰기 나라</h1>
+        
+        <p>
+            '소리 옷'을 보고 '진짜 옷'을 되돌려 찾는,<br>
+            신기하고 재미있는 받아쓰기 학습입니다.
+        </p>
 
-            <div id="problem-sound-sentence">[소리표기 문장 힌트가 여기에 표시됩니다]</div>
+        <nav>
+            <a href="rules.html" class="rules-btn">📚 규칙 배우러 가기</a>
             
-            <label for="user-answer">진짜 문장(정답) 적기:</label>
-            <input type="text" id="user-answer" placeholder="정답 문장을 입력하세요">
-            
-            <button id="action-button">정답 확인!</button>
-        </div>
-
-        <div id="feedback-container">
-            <div id="feedback-result"></div>
-            <div id="rule-explanation"></div>
-        </div>
+            <a href="select.html" class="quiz-btn">✍️ 퀴즈 풀러 가기</a>
+        </nav>
     </main>
 
-    <script>
-        // 선생님의 3차 정보(데이터베이스 이미지)를 기반으로 퀴즈 데이터를 구성합니다.
-        const quizData = [
-            {
-                audioFile: "1.2_아빠가 횃불을 들고 있어요.mp3", // (이미지 1)
-                soundSentence: "[아빠가 홰뿌를 들고 이써요.]",   // (이미지 2, N열)
-                answerSentence: "아빠가 횃불을 들고 있어요.",   // (이미지 2, L열)
-                rules: "2번(받침대장), 6번(거센소리)",        // (이미지 2, J열)
-                explanation: "규칙을 되돌려볼까요?<br>1. <strong>[홰뿌를]</strong> → <strong>'횃불을'</strong><br>2. <strong>[이써요]</strong> → <strong>'있어요'</strong><br>핵심 규칙: <strong>[2번: 받침 대장]</strong>, <strong>[6번: 거센소리 로봇]</strong> 등이 적용되었어요!"
-            },
-            {
-                audioFile: "2.2_누나가 돋보기로 벌레를 봐요.mp3",
-                soundSentence: "[누나가 돋뽀기로 벌레를 봐요.]",   // (이미지 2, N열)
-                answerSentence: "누나가 돋보기로 벌레를 봐요.",   // (이미지 2, L열)
-                rules: "2번(받침대장), 4번(짝꿍소리)",        // (이미지 2, J열)
-                explanation: "규칙을 되돌려볼까요?<br>1. <strong>[돋뽀기로]</strong> → <strong>'돋보기로'</strong><br>핵심 규칙: <strong>[2번: 받침 대장]</strong>과 <strong>[4번: 짝꿍 소리]</strong>가 적용되었어요! *([돋뽀기]는 사실 '4번:힘센소리'에 더 가깝지만, DB를 따랐습니다)*"
-            },
-            {
-                audioFile: "3.2_숲에 나무가 아주 커요.mp3",
-                soundSentence: "[수페 나무가 아주 커요.]",      // (이미지 2, N열)
-                answerSentence: "숲에 나무가 아주 커요.",      // (이미지 2, L열)
-                rules: "1번(연음-소리옷), 2번(받침대장)",      // (이미지 2, J열)
-                explanation: "규칙을 되돌려볼까요?<br>1. <strong>[수페]</strong> → <strong>'숲에'</strong><br>'ㅍ' 받침이 'ㅇ'을 만나 이사(연음)갔네요! 핵심 규칙: <strong>[1번: 이사 가는 받침]</strong>, <strong>[2번: 받침 대장]</strong>입니다!"
-            },
-            {
-                audioFile: "7.2_꽃에 물을 주어요.mp3",
-                soundSentence: "[꼬체 무를 주어요.]", // (이미지 2, N열)
-                answerSentence: "꽃에 물을 주어요.", // (이미지 2, L열)
-                rules: "1번(연음-소리옷), 2번(받침대장)", // (이미지 2, J열)
-                explanation: "규칙을 되돌려볼까요?<br>1. <strong>[꼬체]</strong> → <strong>'꽃에'</strong><br>'ㅊ' 받침이 'ㅇ'을 만나 이사(연음)갔네요! 핵심 규칙: <strong>[1번: 이사 가는 받침]</strong>, <strong>[2번: 받침 대장]</strong>입니다!"
-            }
-        ];
-
-        let currentQuizIndex = 0;
-        let isQuizFinished = false;
-
-        // DOM 요소 가져오기
-        const playAudioBtn = document.getElementById('play-audio-btn');
-        const problemSoundSentenceEl = document.getElementById('problem-sound-sentence');
-        const userAnswerEl = document.getElementById('user-answer');
-        const actionButtonEl = document.getElementById('action-button');
-        const feedbackContainerEl = document.getElementById('feedback-container');
-        const feedbackResultEl = document.getElementById('feedback-result');
-        const ruleExplanationEl = document.getElementById('rule-explanation');
-
-        // 오디오 재생 (시뮬레이션)
-        playAudioBtn.addEventListener('click', () => {
-            if (isQuizFinished) return;
-            const currentQuiz = quizData[currentQuizIndex];
-            
-            // 실제 오디오 재생 로직 (지금은 alert로 대체)
-            // const audio = new Audio(currentQuiz.audioFile);
-            // audio.play();
-            
-            alert(`[오디오 재생 시뮬레이션]\n"${currentQuiz.answerSentence}"\n\n(실제로는 ${currentQuiz.audioFile} 파일이 재생됩니다)`);
-        });
-
-        // 퀴즈 로드 함수
-        function loadQuiz() {
-            if (currentQuizIndex >= quizData.length) {
-                problemSoundSentenceEl.textContent = "🎉 모든 퀴즈 완료! 🎉";
-                userAnswerEl.style.display = 'none';
-                playAudioBtn.style.display = 'none';
-                actionButtonEl.textContent = "다시 시작하기";
-                actionButtonEl.className = 'next';
-                feedbackContainerEl.style.display = 'none';
-                isQuizFinished = true;
-                return;
-            }
-
-            isQuizFinished = false;
-            const currentQuiz = quizData[currentQuizIndex];
-            
-            problemSoundSentenceEl.textContent = currentQuiz.soundSentence;
-            userAnswerEl.value = "";
-            userAnswerEl.focus();
-            
-            playAudioBtn.style.display = 'block';
-            userAnswerEl.style.display = 'block';
-            actionButtonEl.textContent = "정답 확인!";
-            actionButtonEl.className = "";
-            
-            feedbackContainerEl.style.display = 'none';
-        }
-
-        // 정답 확인 함수
-        function checkAnswer() {
-            const currentQuiz = quizData[currentQuizIndex];
-            const userAnswer = userAnswerEl.value.trim().replace(/\s+/g, ''); // 띄어쓰기 무시
-            const correctAnswer = currentQuiz.answerSentence.replace(/\s+/g, ''); // 띄어쓰기 무시
-
-            feedbackContainerEl.style.display = 'block';
-            ruleExplanationEl.innerHTML = currentQuiz.explanation;
-
-            if (userAnswer === correctAnswer) {
-                feedbackResultEl.textContent = "정답입니다! (진짜 옷 찾기 성공!)";
-                feedbackResultEl.className = 'correct';
-            } else {
-                feedbackResultEl.textContent = `아쉬워요! 정답은 '${currentQuiz.answerSentence}'입니다.`;
-                feedbackResultEl.className = 'wrong';
-            }
-
-            actionButtonEl.textContent = "다음 문제로! →";
-            actionButtonEl.className = 'next';
-        }
-
-        // 버튼 클릭 이벤트 처리
-        actionButtonEl.addEventListener('click', () => {
-            if (isQuizFinished) {
-                currentQuizIndex = 0;
-                loadQuiz();
-            } else if (actionButtonEl.classList.contains('next')) {
-                currentQuizIndex++;
-                loadQuiz();
-            } else {
-                checkAnswer();
-            }
-        });
-
-        // 엔터 키로 정답 확인
-        userAnswerEl.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                if (!actionButtonEl.classList.contains('next')) {
-                    checkAnswer();
-                }
-            }
-        });
-
-        // 첫 번째 퀴즈 로드
-        loadQuiz();
-    </script>
 </body>
 </html>
