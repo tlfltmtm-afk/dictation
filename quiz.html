@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👑 거꾸로 받아쓰기 (범위 선택)</title>
+    <title>👑 거꾸로 받아쓰기 (퀴즈 진행)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
         body {
-            font-family: 'Gowun Dodum', sans-serif;
+            font-family: 'Gowun+Dodum', sans-serif;
             background-color: #f7f3e9;
             color: #333;
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         main {
@@ -20,168 +24,425 @@
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 600px; 
+            max-width: 600px;
             margin: 20px auto;
-            padding: 40px;
+            padding: 30px 40px;
             box-sizing: border-box;
             text-align: center;
         }
 
         h1 {
             color: #5cb85c;
-            text-align: center;
             margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .back-btn {
-            display: inline-block;
-            font-size: 1.1em;
-            color: #0275d8;
-            text-decoration: none;
-            margin-bottom: 20px;
-        }
-        .back-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* --- 선택 영역 스타일 --- */
-        .selection-group {
-            margin-bottom: 30px;
-            text-align: left;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
-
-        .selection-group label {
-            display: block;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #444;
             margin-bottom: 10px;
         }
 
-        .selection-group select {
-            width: 100%;
-            padding: 12px 15px;
+        #progress-indicator {
             font-size: 1.1em;
+            color: #888;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        /* 1. 오디오 컨트롤 */
+        #audio-controls-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .audio-btn {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Gowun Dodum', sans-serif;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #0275d8;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        .audio-btn:hover {
+            background-color: #025aa5;
+        }
+        /* 느리게 듣기 버튼 */
+        #play-slow {
+            background-color: #5bc0de;
+        }
+        #play-slow:hover {
+            background-color: #4694ab;
+        }
+
+        /* 2. 정답 입력 */
+        #answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.3em;
             font-family: 'Gowun Dodum', sans-serif;
             border: 2px solid #ccc;
             border-radius: 8px;
-            -webkit-appearance: none; /* 기본 드롭다운 스타일 제거 */
-            -moz-appearance: none;
-            appearance: none;
-            background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23444%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-25.2%200l-91.8%2091.8L78%2069.4c-6.8-6.8-17.6-6.8-25.4%200-6.8%206.8-6.8%2017.6%200%2025.4l104%20104c4.8%204.8%2011.8%206.8%2018.6%206.8s13.8-2%2018.6-6.8l104-104c6.8-6.8%206.8-17.6%200-25.4z%22%2F%3E%3C%2Fsvg%3E') no-repeat right 15px center;
-            background-size: 10px;
-        }
-        
-        /* 퀴즈 시작 버튼 */
-        #start-quiz-btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            font-size: 1.4em;
-            font-family: 'Gowun Dodum', sans-serif;
-            font-weight: bold;
-            color: #fff;
-            background-color: #f0ad4e; /* 주황색 계열 */
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: background-color 0.3s;
-        }
-        #start-quiz-btn:hover {
-            background-color: #e89e3a;
+            box-sizing: border-box;
+            text-align: center;
+            margin-bottom: 15px;
         }
 
+        #submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            font-family: 'Gowun Dodum', sans-serif;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #5cb85c;
+            color: white;
+            transition: background-color 0.2s;
+            margin-bottom: 25px;
+        }
+        #submit-btn:hover {
+            background-color: #4a994a;
+        }
+
+        /* 3. 힌트 버튼 */
+        #hint-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .hint-btn {
+            padding: 12px 10px;
+            font-size: 1.1em;
+            font-family: 'Gowun Dodum', sans-serif;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #f0ad4e;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        .hint-btn:hover {
+            background-color: #e89e3a;
+        }
+        .hint-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* 4. 결과 및 힌트 표시 영역 */
+        #result-area {
+            min-height: 50px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            font-size: 1.2em;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+        #result-area.correct {
+            color: #28a745;
+        }
+        #result-area.incorrect {
+            color: #dc3545;
+        }
+
+        /* 5. 네비게이션 */
+        #navigation-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #next-btn {
+            padding: 12px 25px;
+            font-size: 1.2em;
+            font-family: 'Gowun Dodum', sans-serif;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        #next-btn:hover {
+            background-color: #555;
+        }
+
+        #back-link {
+            font-size: 1.1em;
+            color: #0275d8;
+            text-decoration: none;
+        }
+        #back-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
     <main>
-        <h1>✍️ 퀴즈 범위 선택</h1>
-        <a href="index.html" class="back-btn">← 메인 화면으로 돌아가기</a>
-        
-        <p style="color:#d9534f; font-weight: bold;">
-            학습할 범위를 선택하고 실전 퀴즈를 시작하세요!
-        </p>
+        <h1>✍️ 받아쓰기 퀴즈</h1>
+        <div id="progress-indicator">불러오는 중...</div>
 
-        <div class="selection-group">
-            <label for="grade-select">학년/학기 선택 (필수)</label>
-            <select id="grade-select">
-                <option value="all">전체 학년/학기</option>
-            </select>
+        <!-- 1. 오디오 컨트롤 -->
+        <div id="audio-controls-container">
+            <button id="play-1" class="audio-btn">🔊 1회 듣기</button>
+            <button id="play-slow" class="audio-btn">🐢 느리게 듣기</button>
+            <button id="play-3" class="audio-btn">🔊 3회 듣기 (2초 간격)</button>
+            <button id="play-5" class="audio-btn">🔊 5회 듣기 (2초 간격)</button>
         </div>
 
-        <div class="selection-group">
-            <label for="rule-select">규칙 선택 (선택)</label>
-            <select id="rule-select">
-                <option value="all">전체 규칙</option>
-            </select>
+        <!-- 2. 정답 입력 -->
+        <input type="text" id="answer-input" placeholder="정답을 입력하세요">
+        <button id="submit-btn">제출하기</button>
+
+        <!-- 3. 힌트 버튼 -->
+        <div id="hint-container">
+            <button id="hint-sound" class="hint-btn">💡 소리 힌트</button>
+            <button id="hint-rule" class="hint-btn">🧩 규칙 힌트</button>
+            <button id="hint-answer" class="hint-btn">👀 정답 보기</button>
         </div>
 
-        <button id="start-quiz-btn">🚀 퀴즈 시작!</button>
+        <!-- 4. 결과 및 힌트 표시 영역 -->
+        <div id="result-area">오디오 버튼을 눌러 퀴즈를 시작하세요.</div>
+
+        <!-- 5. 네비게이션 -->
+        <div id="navigation-area">
+            <a href="index.html" id="back-link">← 범위 선택으로</a>
+            <button id="next-btn" style="display: none;">다음 문제 ➔</button>
+        </div>
     </main>
 
+    <!-- 1. 데이터베이스 JS (필수) -->
+    <script src="database.js"></script>
+
+    <!-- 2. 퀴즈 진행 로직 JS -->
     <script>
-        // --- CSV에서 추출된 데이터 (Python 분석 결과) ---
-        // 이 데이터를 기반으로 드롭다운을 채웁니다.
-
-        const GRADE_SEMESTERS = ['1학년 1학기', '1학년 2학기', '2학년 1학기', '2학년 2학기'];
+        // --- 1. 전역 변수 및 DOM 요소 ---
+        let quizSet = []; // 이번 퀴즈에 사용될 문제 배열
+        let currentQuestionIndex = 0;
+        let currentQuestion = null;
+        let currentAudio = null;
         
-        // 데이터베이스에서 추출된 29개의 고유 규칙 목록
-        const UNIQUE_RULES = [
-            '(규칙 없음)', "10번 (깜짝! 'ㄴ' 소리)", "10번(깜짝! 'ㄴ' 소리)", '11번(부끄럼쟁이 첫소리)', '12번 (단어 숨쉬기)', 
-            '14번 (소리와 표기 구분)', '1번 (연음)', '1번(연음)', '1번(이사 가는 받침)', '2번 (받침 대장)', 
-            '2번 (받침 대장)', '2번(받침 대장)', '4번 (짝꿍 소리)', '4번(짝꿍 소리)', '4번(힘센 소리)', 
-            '5번 ('이' 마법)', '5번(구개음화)', '6번 (거센소리)', '6번(거센소리)', '6번(거센소리 로봇)', 
-            '7번 (투명인간 ㅎ)', '7번(투명인간 ㅎ)', '7번(투명인간 ㅎ)', '8번 (모음 합체)', '9번 (깜짝! ㄴ 소리)', 
-            '9번(모음 합체)', '9번(ㄴ첨가)', '표기-발음 불일치', '힘센 소리'
-        ];
-        
-        // --- JavaScript 로직 ---
+        let audioPlayLoopId = null; // 오디오 반복재생 제어용 ID
 
-        const gradeSelect = document.getElementById('grade-select');
-        const ruleSelect = document.getElementById('rule-select');
-        const startQuizBtn = document.getElementById('start-quiz-btn');
+        // DOM 요소
+        const progressIndicator = document.getElementById('progress-indicator');
+        const answerInput = document.getElementById('answer-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultArea = document.getElementById('result-area');
+        const nextBtn = document.getElementById('next-btn');
+        const backLink = document.getElementById('back-link');
 
-        // 1. 드롭다운 채우기 함수
-        function populateDropdown(selectElement, optionsArray) {
-            optionsArray.forEach(option => {
-                const newOption = document.createElement('option');
-                newOption.value = option;
-                newOption.textContent = option;
-                selectElement.appendChild(newOption);
+        // 오디오 버튼
+        const play1Btn = document.getElementById('play-1');
+        const play3Btn = document.getElementById('play-3');
+        const play5Btn = document.getElementById('play-5');
+        const playSlowBtn = document.getElementById('play-slow');
+        const audioButtons = [play1Btn, play3Btn, play5Btn, playSlowBtn];
+
+        // 힌트 버튼
+        const hintSoundBtn = document.getElementById('hint-sound');
+        const hintRuleBtn = document.getElementById('hint-rule');
+        const hintAnswerBtn = document.getElementById('hint-answer');
+        const hintButtons = [hintSoundBtn, hintRuleBtn, hintAnswerBtn];
+
+        // --- 2. 페이지 초기화 (window.onload) ---
+        window.onload = () => {
+            // URL에서 'grade'와 'rule' 파라미터 가져오기
+            const params = new URLSearchParams(window.location.search);
+            const grade = params.get('grade');
+            const rule = params.get('rule');
+
+            // 1. quizData 필터링 (database.js에 의존)
+            quizSet = quizData.filter(item => {
+                // "전체"가 아닐 경우에만 조건을 검사
+                const gradeMatch = (grade === 'all' || item.학년학기 === grade);
+                // "전체"가 아닐 경우, 규칙 문자열에 해당 규칙이 '포함'되어 있는지 검사
+                const ruleMatch = (rule === 'all' || item["단어 적용 규칙"].includes(rule));
+                return gradeMatch && ruleMatch;
             });
+
+            // (선택사항) 문제 세트 섞기 (Sattolo's algorithm)
+            for (let i = quizSet.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * i);
+                [quizSet[i], quizSet[j]] = [quizSet[j], quizSet[i]];
+            }
+
+            // 2. 퀴즈 시작
+            if (quizSet.length > 0) {
+                loadQuestion(0);
+            } else {
+                // 선택된 범위에 문제가 없을 경우
+                progressIndicator.textContent = "퀴즈 완료";
+                resultArea.innerHTML = "선택한 범위에 해당하는 문제가 없습니다. <br>다른 범위를 선택해 주세요.";
+                // 모든 버튼 비활성화
+                [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = true);
+            }
+
+            // 3. 이벤트 리스너 연결
+            setupEventListeners();
+        };
+
+        // --- 3. 핵심 기능: 문제 불러오기 ---
+        function loadQuestion(index) {
+            if (index < 0 || index >= quizSet.length) return;
+
+            currentQuestionIndex = index;
+            currentQuestion = quizSet[index];
+
+            // 1. 진행 상태 표시
+            progressIndicator.textContent = `문제 ${index + 1} / ${quizSet.length}`;
+
+            // 2. 오디오 설정 (중요: audio/ 폴더 경로)
+            stopAudioLoop(); // 이전 문제의 오디오 루프 중지
+            const audioFileName = currentQuestion["오디오 파일명(단어)"];
+            currentAudio = new Audio(`audio/${audioFileName}`);
+            currentAudio.onerror = () => {
+                resultArea.innerHTML = `오디오 파일(${audioFileName})을 불러올 수 없습니다. 파일 이름을 확인하세요.`;
+                resultArea.className = 'incorrect';
+            };
+
+            // 3. UI 초기화
+            answerInput.value = "";
+            resultArea.innerHTML = "오디오 버튼을 눌러 문제를 듣고 정답을 입력하세요.";
+            resultArea.className = "";
+            nextBtn.style.display = 'none';
+
+            // 4. 모든 버튼/입력창 활성화
+            [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = false);
         }
 
-        // 학년/학기 드롭다운 채우기
-        populateDropdown(gradeSelect, GRADE_SEMESTERS);
-        
-        // 규칙 드롭다운 채우기
-        // *주의*: 규칙 목록은 중복된 이름/형식이 있지만, DB에 있는 그대로를 보여주는 것이 정확한 필터링에 도움이 됩니다.
-        populateDropdown(ruleSelect, UNIQUE_RULES);
+        // --- 4. 이벤트 리스너 설정 ---
+        function setupEventListeners() {
+            // 4-1. 오디오 재생 버튼
+            play1Btn.onclick = () => playAudio(1, 0, 1.0); // 1회, 0초 간격, 보통 속도
+            play3Btn.onclick = () => playAudio(3, 2000, 1.0); // 3회, 2초 간격, 보통 속도
+            play5Btn.onclick = () => playAudio(5, 2000, 1.0); // 5회, 2초 간격, 보통 속도
+            playSlowBtn.onclick = () => playAudio(1, 0, 0.75); // 1회, 0초 간격, 느린 속도
 
+            // 4-2. 힌트 버튼
+            hintSoundBtn.onclick = () => {
+                resultArea.innerHTML = `🔊 **소리 힌트**: ${currentQuestion["단어 소리표기"]}`;
+                hintSoundBtn.disabled = true; // 힌트는 한 번만
+            };
+            hintRuleBtn.onclick = () => {
+                resultArea.innerHTML = `🧩 **규칙 힌트**: ${currentQuestion["단어 적용 규칙"]}`;
+                hintRuleBtn.disabled = true; // 힌트는 한 번만
+            };
+            hintAnswerBtn.onclick = () => {
+                revealAnswer();
+            };
 
-        // 2. 퀴즈 시작 버튼 클릭 이벤트 핸들러
-        startQuizBtn.addEventListener('click', () => {
-            const selectedGrade = gradeSelect.value;
-            const selectedRule = ruleSelect.value;
+            // 4-3. 제출 버튼
+            submitBtn.onclick = () => {
+                checkAnswer();
+            };
+            // 엔터 키로 제출
+            answerInput.onkeyup = (e) => {
+                if (e.key === 'Enter') checkAnswer();
+            };
+
+            // 4-4. 다음 문제 버튼
+            nextBtn.onclick = () => {
+                if (currentQuestionIndex < quizSet.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1);
+                } else {
+                    // 퀴즈 완료
+                    progressIndicator.textContent = "퀴즈 완료";
+                    resultArea.innerHTML = "<h2>✨ 모든 퀴즈를 완료했습니다!</h2>축하합니다!";
+                    resultArea.className = 'correct';
+                    nextBtn.style.display = 'none';
+                    backLink.innerHTML = "🎉 범위 선택으로 돌아가기";
+                    // 모든 버튼 비활성화
+                    [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = true);
+                }
+            };
+        }
+
+        // --- 5. 오디오 재생 함수 ---
+        function playAudio(times, interval, rate) {
+            stopAudioLoop(); // 기존 루프 중지
             
-            // 필수 선택 항목 확인 (Grade/Semester는 '전체'도 허용)
-            if (selectedGrade === "all" && selectedRule === "all") {
-                alert("전체 범위로 퀴즈를 시작합니다!");
-                // 실제 구현 시: window.location.href = `quiz.html?grade=all&rule=all`;
-            } else {
-                alert(`[선택 완료]\n- 학년/학기: ${selectedGrade === 'all' ? '전체' : selectedGrade}\n- 규칙: ${selectedRule === 'all' ? '전체' : selectedRule}\n\n이 조건으로 퀴즈를 시작합니다!`);
-                // 실제 구현 시: window.location.href = `quiz.html?grade=${selectedGrade}&rule=${selectedRule}`;
+            let count = 0;
+            
+            function play() {
+                if (count >= times) return; // 재생 횟수 도달
+                count++;
+
+                currentAudio.playbackRate = rate; // 재생 속도 설정
+                currentAudio.currentTime = 0; // 처음부터 재생
+                
+                // 오디오 재생이 끝나면 다음 재생을 예약
+                currentAudio.onended = () => {
+                    if (count < times) {
+                        // interval (2초) 후에 다음 재생 실행
+                        audioPlayLoopId = setTimeout(play, interval);
+                    }
+                };
+                
+                currentAudio.play().catch(e => {
+                    console.error("오디오 재생 오류:", e);
+                    resultArea.innerHTML = "오디오 재생에 실패했습니다.";
+                    resultArea.className = 'incorrect';
+                });
             }
             
-            // 프로토타입에서는 다음 페이지로 이동하는 대신 알림만 띄웁니다.
-        });
-    </script>
+            play(); // 첫 재생 시작
+        }
 
+        // 반복 재생을 강제로 중지하는 함수 (다른 버튼 클릭 시)
+        function stopAudioLoop() {
+            if (audioPlayLoopId) {
+                clearTimeout(audioPlayLoopId);
+                audioPlayLoopId = null;
+            }
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.onended = null; // 콜백 제거
+            }
+        }
+
+        // --- 6. 정답 확인 및 처리 ---
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim();
+            const correctAnswer = currentQuestion.단어;
+
+            if (userAnswer === correctAnswer) {
+                // 정답일 경우
+                resultArea.innerHTML = "🎉 정답입니다!";
+                resultArea.className = 'correct';
+                // 퀴즈 컨트롤 비활성화
+                [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = true);
+                // 다음 문제 버튼 표시
+                nextBtn.style.display = 'block';
+                // 정답 맞추면 자동으로 다음 문제로 포커스 (UX 향상)
+                nextBtn.focus();
+            } else {
+                // 오답일 경우
+                resultArea.innerHTML = "😥 아닙니다. 다시 생각해보세요. (힌트를 사용해볼까요?)";
+                resultArea.className = 'incorrect';
+                answerInput.focus(); // 다시 입력하도록 포커스
+            }
+        }
+        
+        // "정답 보기" 힌트를 눌렀을 때
+        function revealAnswer() {
+            const correctAnswer = currentQuestion.단어;
+            resultArea.innerHTML = `👀 **정답**: ${correctAnswer}`;
+            resultArea.className = "";
+            answerInput.value = correctAnswer; // 입력창에 정답 표시
+            
+            // 퀴즈 컨트롤 비활성화
+            [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = true);
+            // 다음 문제 버튼 표시
+            nextBtn.style.display = 'block';
+        }
+
+    </script>
 </body>
 </html>
