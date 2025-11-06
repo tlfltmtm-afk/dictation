@@ -40,13 +40,42 @@
             box-sizing: border-box; 
         }
 
+        /* [수정] 제목이 .header-with-link에 의해 중앙 정렬되므로 text-align: center 제거 */
         h1 { 
             color: var(--color-primary); 
-            text-align: center; 
+            /* text-align: center; */
             margin-top: 0; 
-            margin-bottom: 20px; 
+            /* margin-bottom: 20px; */ /* 간격은 부모(.header-with-link)에서 관리 */
+            margin-bottom: 0;
         }
         
+        /* 7. 제목 및 아이콘 링크 스타일 (새로 추가) */
+        .header-with-link {
+            display: flex; /* 자식 요소를 가로로 정렬 */
+            justify-content: center; /* h1을 중앙에 배치 */
+            align-items: center;
+            position: relative; /* 아이콘 위치 지정을 위한 기준점 */
+            margin-bottom: 20px; /* 기존 h1의 하단 간격 복원 */
+        }
+
+        .icon-link {
+            position: absolute; /* .header-with-link 기준으로 위치 지정 */
+            right: 0; /* 우측 끝에 배치 */
+            top: 50%;
+            transform: translateY(-50%); /* 수직 중앙 정렬 */
+            font-size: 1.8em; /* 아이콘 크기 */
+            text-decoration: none; /* 밑줄 제거 */
+            color: var(--color-warning); /* 아이콘 색상 (경고색 사용) */
+            transition: color 0.2s;
+            line-height: 1; /* 높이 조정 */
+        }
+
+        .icon-link:hover {
+            color: #e89e3a; /* 호버 색상 */
+        }
+        /* [수정 끝] */
+
+
         /* 2. selection-group: 필터 그룹 래퍼 */
         .selection-group { 
             margin-bottom: 30px; 
@@ -177,8 +206,12 @@
 </head>
 <body>
     <main>
-        <h1>✍️ 퀴즈 범위 선택</h1>
-        
+        <div class="header-with-link">
+            <h1>✍️ 퀴즈 범위 선택</h1>
+            <a href="rules.html" class="icon-link" aria-label="규칙 설명 페이지로 이동">
+                📚
+            </a>
+        </div>
         <div class="selection-group">
             <label>퀴즈 유형 선택</label>
             <div class="radio-group">
