@@ -319,6 +319,55 @@
 
                 return gradeMatch && ruleMatch && typeMatch;
             });
+
+            // (선택사항) 문제 세트 섞기 (Sattolo's algorithm)
+            for (let i = quizSet.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * i);
+                [quizSet[i], quizSet[j]] = [quizSet[j], quizSet[i]];
+            }
+
+            // 2. 퀴즈 시작
+            if (quizSet.length > 0) {
+                loadQuestion(0);
+            } else {
+                // 선택된 범위에 문제가 없을 경우
+                progressIndicator.textContent = "퀴즈 완료";
+                resultArea.innerHTML = "선택한 범위에 해당하는 문제가 없습니다. <br>다른 범위를 선택해 주세요.";
+                // 모든 버튼 비활성화
+                [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = true);
+            }
+
+            // 3. 이벤트 리스너 연결
+            setupEventListeners();
+        };
+
+        // --- 3. 핵심 기능: 문제 불러오기 ---
+        function loadQuestion(index) {
+            if (index < 0 || index >= quizSet.length) return;
+
+            currentQuestionIndex = index;
+            currentQuestion = quizSet[index];
+
+            // 1. 진행 상태 표시
+            progressIndicator.textContent = `문제 ${index + 1} / ${quizSet.length}`;
+
+            // 2. 오디오 설정 (중요: audio/ 폴더 경로)
+            stopAudioLoop(); // 이전 문제의 오디오 루프 중지
+            const audioFileName = currentQuestion["오디오 파일명(단어)"];
+            currentAudio = new Audio(`audio/${audioFileName}`);
+            currentAudio.onerror = () => {
+                resultArea.innerHTML = `오디오 파일(${audioFileName})을 불러올 수 없습니다. 파일 이름을 확인하세요.`;
+                resultArea.className = 'incorrect';
+            };
+
+            // 3. UI 초기화
+            answerInput.value = "";
+            resultArea.innerHTML = "오디오 버튼을 눌러 문제를 듣고 정답을 입력하세요.";
+            resultArea.className = "";
+            nextBtn.style.display = 'none';
+
+            // 4. 모든 버튼/입력창 활성화
+            [...audioButtons, ...hintButtons, submitBtn, answerInput].forEach(el => el.disabled = false);
         }
 
         function shuffleQuizSet() {
