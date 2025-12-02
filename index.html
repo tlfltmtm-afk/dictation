@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,122 +8,142 @@
     <style>
         /* 1. 기본 스타일 */
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
-        
+
         :root {
             --font-main: 'Gowun Dodum', sans-serif;
             --color-bg: #f7f3e9;
             --color-surface: #fff;
-            --color-primary: #5cb85c; /* green */
-            --color-secondary: #0275d8; /* blue */
-            --color-warning: #f0ad4e; /* orange */
+            --color-primary: #5cb85c;
+            /* green */
+            --color-secondary: #0275d8;
+            /* blue */
+            --color-warning: #f0ad4e;
+            /* orange */
             --color-text: #333;
             --color-border: #ddd;
             --color-disabled: #f9f9f9;
         }
 
-        body { 
-            font-family: var(--font-main); 
-            background-color: var(--color-bg); 
-            color: var(--color-text); 
-            margin: 0; 
-            padding: 20px; 
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 20px;
             box-sizing: border-box;
         }
 
-        main { 
-            background-color: var(--color-surface); 
-            border-radius: 15px; 
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); 
-            width: 100%; 
-            max-width: 700px; 
-            margin: 20px auto; 
-            padding: 30px 40px; 
-            box-sizing: border-box; 
+        main {
+            background-color: var(--color-surface);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 30px 40px;
+            box-sizing: border-box;
         }
 
         /* [수정] 제목이 .header-with-link에 의해 중앙 정렬되므로 text-align: center 제거 */
-        h1 { 
-            color: var(--color-primary); 
+        h1 {
+            color: var(--color-primary);
             /* text-align: center; */
-            margin-top: 0; 
-            /* margin-bottom: 20px; */ /* 간격은 부모(.header-with-link)에서 관리 */
+            margin-top: 0;
+            /* margin-bottom: 20px; */
+            /* 간격은 부모(.header-with-link)에서 관리 */
             margin-bottom: 0;
         }
-        
+
         /* 7. 제목 및 아이콘 링크 스타일 (새로 추가) */
         .header-with-link {
-            display: flex; /* 자식 요소를 가로로 정렬 */
-            justify-content: center; /* h1을 중앙에 배치 */
+            display: flex;
+            /* 자식 요소를 가로로 정렬 */
+            justify-content: center;
+            /* h1을 중앙에 배치 */
             align-items: center;
-            position: relative; /* 아이콘 위치 지정을 위한 기준점 */
-            margin-bottom: 20px; /* 기존 h1의 하단 간격 복원 */
+            position: relative;
+            /* 아이콘 위치 지정을 위한 기준점 */
+            margin-bottom: 20px;
+            /* 기존 h1의 하단 간격 복원 */
         }
 
         .icon-link {
-            position: absolute; /* .header-with-link 기준으로 위치 지정 */
-            right: 0; /* 우측 끝에 배치 */
+            position: absolute;
+            /* .header-with-link 기준으로 위치 지정 */
+            right: 0;
+            /* 우측 끝에 배치 */
             top: 50%;
-            transform: translateY(-50%); /* 수직 중앙 정렬 */
-            font-size: 1.8em; /* 아이콘 크기 */
-            text-decoration: none; /* 밑줄 제거 */
-            color: var(--color-warning); /* 아이콘 색상 (경고색 사용) */
+            transform: translateY(-50%);
+            /* 수직 중앙 정렬 */
+            font-size: 1.8em;
+            /* 아이콘 크기 */
+            text-decoration: none;
+            /* 밑줄 제거 */
+            color: var(--color-warning);
+            /* 아이콘 색상 (경고색 사용) */
             transition: color 0.2s;
-            line-height: 1; /* 높이 조정 */
+            line-height: 1;
+            /* 높이 조정 */
         }
 
         .icon-link:hover {
-            color: #e89e3a; /* 호버 색상 */
+            color: #e89e3a;
+            /* 호버 색상 */
         }
+
         /* [수정 끝] */
 
 
         /* 2. selection-group: 필터 그룹 래퍼 */
-        .selection-group { 
-            margin-bottom: 30px; 
-            text-align: left; 
-            padding: 20px; 
-            border: 1px solid var(--color-border); 
-            border-radius: 10px; 
+        .selection-group {
+            margin-bottom: 30px;
+            text-align: left;
+            padding: 20px;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
             background-color: #fafafa;
         }
-        
-        .selection-group > label { 
-            display: block; 
-            font-size: 1.3em; 
-            font-weight: bold; 
-            color: var(--color-text); 
+
+        .selection-group>label {
+            display: block;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--color-text);
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--color-primary);
         }
 
         /* 3. 라디오 버튼 그룹 (기본 유형) */
-        .radio-group { 
-            display: flex; 
-            gap: 20px; 
-            margin-top: 10px; 
-            justify-content: flex-start; 
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            justify-content: flex-start;
         }
-        .radio-group label { 
-            font-weight: normal; 
-            display: flex; 
-            align-items: center; 
-            cursor: pointer; 
+
+        .radio-group label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
             font-size: 1.15em;
         }
-        .radio-group input { 
-            width: 18px; 
-            height: 18px; 
-            margin-right: 8px; 
+
+        .radio-group input {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
         }
 
         /* 4. 버튼/태그형 라디오 버튼 UI */
-        .button-grid-group, .radio-list-group {
+        .button-grid-group,
+        .radio-list-group {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
         }
-        
+
         /* 실제 라디오 버튼은 숨김 */
         .button-grid-group input[type="radio"],
         .radio-list-group input[type="radio"] {
@@ -144,9 +165,10 @@
             transition: all 0.2s ease;
             line-height: 1.4;
         }
-        
+
         .radio-list-group label {
-            width: 100%; /* 목록형은 100% 너비 */
+            width: 100%;
+            /* 목록형은 100% 너비 */
         }
 
         .button-grid-group label span:hover,
@@ -154,7 +176,7 @@
             border-color: var(--color-secondary);
             background-color: #f7fcff;
         }
-        
+
         /* '전체' 버튼 특별 스타일 */
         .button-grid-group label[data-value="all"] span,
         .radio-list-group label[data-value="all"] span {
@@ -164,8 +186,8 @@
         }
 
         /* ★ 선택된 항목의 스타일 ★ */
-        .button-grid-group input[type="radio"]:checked + span,
-        .radio-list-group input[type="radio"]:checked + span {
+        .button-grid-group input[type="radio"]:checked+span,
+        .radio-list-group input[type="radio"]:checked+span {
             background-color: var(--color-secondary);
             color: white;
             border-color: var(--color-secondary);
@@ -179,38 +201,48 @@
             opacity: 0.7;
             pointer-events: none;
         }
-        
-        #unit-selection-area.disabled > label {
+
+        #unit-selection-area.disabled>label {
             color: #999;
             border-bottom-color: var(--color-border);
         }
 
         /* 6. 시작 버튼 */
-        #start-quiz-btn { 
-            display: block; 
-            width: 100%; 
-            padding: 18px; 
-            font-size: 1.4em; 
-            font-family: var(--font-main); 
-            font-weight: bold; 
-            color: #fff; 
-            background-color: var(--color-warning); 
-            border: none; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            margin-top: 30px; 
-            transition: background-color 0.3s; 
+        #start-quiz-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.4em;
+            font-family: var(--font-main);
+            font-weight: bold;
+            color: #fff;
+            background-color: var(--color-warning);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
         }
-        #start-quiz-btn:hover { background-color: #e89e3a; }
+
+        #start-quiz-btn:hover {
+            background-color: #e89e3a;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <div class="header-with-link">
             <h1>✍️ 퀴즈 범위 선택</h1>
-            <a href="rules.html" class="icon-link" aria-label="규칙 설명 페이지로 이동">
-                📚
-            </a>
+            <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; gap: 10px;">
+                <a href="toc.html" class="icon-link" style="position: static; transform: none;" aria-label="목차 보기">
+                    📑
+                </a>
+                <a href="rules.html" class="icon-link" style="position: static; transform: none;"
+                    aria-label="규칙 설명 페이지로 이동">
+                    📚
+                </a>
+            </div>
         </div>
         <div class="selection-group">
             <label>퀴즈 유형 선택</label>
@@ -277,7 +309,7 @@
          */
         function populateRadioGroup(container, name, optionsArray, defaultCheckedValue = "all") {
             // "전체" 옵션은 이미 HTML에 있으므로 여기서는 비웁니다.
-            container.innerHTML = ''; 
+            container.innerHTML = '';
 
             // "전체" 옵션 동적 추가
             const allLabel = document.createElement('label');
@@ -309,7 +341,7 @@
             }
 
             // 3-1. 학년/학기 목록 추출 (중복 제거 및 정렬)
-            const gradeSet = new Set(quizData.map(item => item.학년학기));
+            const gradeSet = new Set(quizData.map(item => item["Year/Semester"]));
             const allGrades = [...gradeSet].sort();
 
             // 3-2. 규칙 목록 추출 (v5 데이터베이스 대응)
@@ -317,10 +349,11 @@
             quizData.forEach(item => {
                 // '단어'와 '문장'의 '적용규칙 1~5' 열을 모두 확인합니다.
                 for (let i = 1; i <= 5; i++) {
-                    const wordRule = item[`단어 적용규칙 ${i}`];
-                    const sentRule = item[`문장 적용규칙 ${i}`];
-                    if (wordRule) ruleSet.add(wordRule);
-                    if (sentRule) ruleSet.add(sentRule);
+                    // 데이터베이스 키: "Syllable 1 Rule", "Syllable 2 rule" (대소문자 혼용 주의)
+                    const keysToCheck = [`Syllable ${i} Rule`, `Syllable ${i} rule`];
+                    keysToCheck.forEach(key => {
+                        if (item[key]) ruleSet.add(item[key]);
+                    });
                 }
             });
             const allRules = [...ruleSet].sort(); // (예: ["1번이사 가는 받침", "2번받침 대장"])
@@ -340,15 +373,15 @@
                 } else {
                     // 특정 학년 선택 시 '단원' 목록 동적 생성
                     unitArea.classList.remove('disabled');
-                    
+
                     // 선택된 학년의 단원 목록만 추출
                     const unitSet = new Set(
                         quizData
-                            .filter(item => item.학년학기 === selectedGrade)
-                            .map(item => item.단원)
+                            .filter(item => item["Year/Semester"] === selectedGrade)
+                            .map(item => item["Chapter"])
                     );
                     const allUnits = [...unitSet].sort();
-                    
+
                     populateRadioGroup(unitContainer, 'unit', allUnits);
                 }
             });
@@ -378,4 +411,5 @@
         }
     </script>
 </body>
+
 </html>
