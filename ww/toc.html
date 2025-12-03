@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 받아쓰기 목차</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+        :root {
+            --font-main: 'Gowun Dodum', sans-serif;
+            --color-bg: #f7f3e9;
+            --color-surface: #fff;
+            --color-primary: #5cb85c;
+            --color-secondary: #0275d8;
+            --color-text: #333;
+            --color-border: #ddd;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        main {
+            background-color: var(--color-surface);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        h1 {
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .toc-group {
+            margin-bottom: 40px;
+        }
+
+        .toc-group h2 {
+            color: var(--color-secondary);
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toc-chapter {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .toc-chapter h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .word-item {
+            background-color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 0.95em;
+        }
+
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 15px;
+            background-color: var(--color-primary);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .back-btn:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>📚 받아쓰기 목차</h1>
+        <div id="toc-container">불러오는 중...</div>
+        <a href="index.html" class="back-btn">돌아가기</a>
+    </main>
+
+    <script src="database.js"></script>
+    <script>
+        window.onload = () => {
+            if (typeof quizData === 'undefined') {
+                document.getElementById('toc-container').innerHTML = "데이터를 불러올 수 없습니다.";
+                return;
+            }
+
+            const container = document.getElementById('toc-container');
+            container.innerHTML = '';
+
+            // 1. 학년/학기별로 그룹화
+            const groupedByGrade = {};
+            quizData.forEach(item => {
+                const grade = item["Year/Semester"];
+                if (!groupedByGrade[grade]) {
+                    groupedByGrade[grade] = [];
+                }
+                groupedByGrade[grade].push(item);
+            });
+
+            // 2. 정렬된 학년 키
+            const sortedGrades = Object.keys(groupedByGrade).sort();
+
+            sortedGrades.forEach(grade => {
+                const gradeGroup = document.createElement('div');
+                gradeGroup.className = 'toc-group';
+
+                const h2 = document.createElement('h2');
+                h2.textContent = grade;
+                gradeGroup.appendChild(h2);
+
+                // 3. 단원별로 그룹화
+                const items = groupedByGrade[grade];
+                const groupedByChapter = {};
+                items.forEach(item => {
+                    const chapter = item["Chapter"];
+                    if (!groupedByChapter[chapter]) {
+                        groupedByChapter[chapter] = [];
+                    }
+                    groupedByChapter[chapter].push(item);
+                });
+
+                const sortedChapters = Object.keys(groupedByChapter).sort();
+
+                sortedChapters.forEach(chapter => {
+                    const chapterDiv = document.createElement('div');
+                    chapterDiv.className = 'toc-chapter';
+
+                    const h3 = document.createElement('h3');
+                    h3.textContent = chapter;
+                    chapterDiv.appendChild(h3);
+
+                    const wordList = document.createElement('div');
+                    wordList.className = 'word-list';
+
+                    groupedByChapter[chapter].forEach(item => {
+                        const wordSpan = document.createElement('span');
+                        wordSpan.className = 'word-item';
+                        wordSpan.textContent = item["Word Notation"]; // 단어만 표시
+                        wordList.appendChild(wordSpan);
+                    });
+
+                    chapterDiv.appendChild(wordList);
+                    gradeGroup.appendChild(chapterDiv);
+                });
+
+                container.appendChild(gradeGroup);
+            });
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 거꾸로 받아쓰기 (규칙 사전)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+        body {
+            font-family: 'Gowun Dodum', sans-serif;
+            background-color: #f7f3e9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        main {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 900px; /* 카드 배치를 위해 너비 확장 */
+            margin: 20px auto;
+            padding: 30px 40px; /* 좌우 패딩 추가 */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #d9534f;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        /* '메인으로' 돌아가기 버튼 */
+        .back-btn {
+            display: inline-block;
+            font-size: 1.1em;
+            color: #0275d8;
+            text-decoration: none;
+            margin-bottom: 30px;
+        }
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* --- (신규) 규칙 그룹 소제목 --- */
+        .rule-group-title {
+            font-size: 1.8em;
+            color: #444;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f0ad4e; /* index.html의 주황색 버튼과 통일 */
+        }
+        .rule-group-title:first-of-type {
+            margin-top: 10px;
+        }
+
+        /* --- (신규) 규칙 카드 그리드 --- */
+        .rule-grid {
+            display: grid;
+            /* 최소 250px, 최대 1fr로 3열 자동 배치 */
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- (신규) 규칙 카드 --- */
+        .rule-card {
+            display: block;
+            background-color: #fdfdfd;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid #0275d8; /* 하단 포인트 컬러 */
+        }
+
+        .rule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 카드 내부 요소 */
+        .card-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0275d8;
+        }
+        
+        .card-icon {
+            font-size: 2.5em;
+            float: right; /* 아이콘을 오른쪽으로 */
+            margin-top: -10px;
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            color: #333;
+        }
+        
+        .card-subtitle {
+            font-size: 1.0em;
+            color: #777;
+            margin: 0;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 600px) {
+            main {
+                padding: 20px;
+            }
+            .rule-grid {
+                /* 모바일에선 1열 */
+                grid-template-columns: 1fr;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1>📚 규칙 사전</h1>
+        <a href="index.html" class="back-btn">← 메인 화면으로 돌아가기</a>
+
+        <h2 class="rule-group-title">1부: 받침의 이동과 변신</h2>
+        <div class="rule-grid">
+            <a href="rules/rule01_yeonum.html" class="rule-card">
+                <span class="card-icon">🚚</span>
+                <span class="card-number">1</span>
+                <h3 class="card-title">이사 가는 받침</h3>
+                <p class="card-subtitle">(연음)</p>
+            </a>
+            <a href="rules/rule02_eumjeol_kkwessori.html" class="rule-card">
+                <span class="card-icon">👑</span>
+                <span class="card-number">2</span>
+                <h3 class="card-title">받침 대장</h3>
+                <p class="card-subtitle">(음절의 끝소리)</p>
+            </a>
+            <a href="rules/rule03_jaeumgun_dansunhwa.html" class="rule-card">
+                <span class="card-icon">🫣</span>
+                <span class="card-number">3</span>
+                <h3 class="card-title">숨바꼭질 받침</h3>
+                <p class="card-subtitle">(자음군 단순화)</p>
+            </a>
+        </div>
+
+        <h2 class="rule-group-title">2부: 소리의 변신과 합체</h2>
+        <div class="rule-grid">
+            <a href="rules/rule04_doensori_doegi.html" class="rule-card">
+                <span class="card-icon">💪</span>
+                <span class="card-number">4</span>
+                <h3 class="card-title">힘센 소리</h3>
+                <p class="card-subtitle">(된소리되기)</p>
+            </a>
+            <a href="rules/rule05_jaeum_donghwa.html" class="rule-card">
+                <span class="card-icon">🤝</span>
+                <span class="card-number">5</span>
+                <h3 class="card-title">짝꿍 소리</h3>
+                <p class="card-subtitle">(자음동화)</p>
+            </a>
+            <a href="rules/rule06_gugaeumhwa.html" class="rule-card">
+                <span class="card-icon">✨</span>
+                <span class="card-number">6</span>
+                <h3 class="card-title">'이' 마법</h3>
+                <p class="card-subtitle">(구개음화)</p>
+            </a>
+             <a href="rules/rule07_jaeum_chukyak.html" class="rule-card">
+                <span class="card-icon">🤖</span>
+                <span class="card-number">7</span>
+                <h3 class="card-title">거센소리 로봇</h3>
+                <p class="card-subtitle">(자음 축약)</p>
+            </a>
+        </div>
+       
+        <h2 class="rule-group-title">3부: 소리의 탈락과 첨가</h2>
+        <div class="rule-grid">
+            <a href="rules/rule08_h_tallak.html" class="rule-card">
+                <span class="card-icon">👻</span>
+                <span class="card-number">8</span>
+                <h3 class="card-title">투명인간 'ㅎ'</h3>
+                <p class="card-subtitle">(ㅎ 탈락)</p>
+            </a>
+            <a href="rules/rule09_moeum_chukyak.html" class="rule-card">
+                <span class="card-icon">🪢</span>
+                <span class="card-number">9</span>
+                <h3 class="card-title">모음 합체!</h3>
+                <p class="card-subtitle">(모음 축약·탈락)</p>
+            </a>
+            <a href="rules/rule10_n_cheomga.html" class="rule-card">
+                <span class="card-icon">🎁</span>
+                <span class="card-number">10</span>
+                <h3 class="card-title">깜짝! 'ㄴ' 소리</h3>
+                <p class="card-subtitle">(ㄴ 첨가)</p>
+            </a>
+            <a href="rules/rule11_dueum_beopchik.html" class="rule-card">
+                <span class="card-icon">😊</span>
+                <span class="card-number">11</span>
+                <h3 class="card-title">부끄럼쟁이 첫소리</h3>
+                <p class="card-subtitle">(두음 법칙)</p>
+            </a>
+        </div>
+
+        <h2 class="rule-group-title">4부: 실전 받아쓰기</h2>
+        <div class="rule-grid">
+            <a href="rules/rule12_ttyeossuegi.html" class="rule-card">
+                <span class="card-icon">😮‍💨</span>
+                <span class="card-number">12</span>
+                <h3 class="card-title">단어 숨쉬기</h3>
+                <p class="card-subtitle">(띄어쓰기)</p>
+            </a>
+            <a href="rules/rule13_ssangdungyi_moeum.html" class="rule-card">
+                <span class="card-icon">👯</span>
+                <span class="card-number">13</span>
+                <h3 class="card-title">쌍둥이 모음</h3>
+                <p class="card-subtitle">(혼동하기 쉬운 모음)</p>
+            </a>
+            <a href="rules/rule14_sori_pyogi.html" class="rule-card">
+                <span class="card-icon">👕</span>
+                <span class="card-number">14</span>
+                <h3 class="card-title">소리 옷, 진짜 옷</h3>
+                <p class="card-subtitle">(소리와 표기)</p>
+            </a>
+        </div>
+
+    </main>
+</body>
+</html>
