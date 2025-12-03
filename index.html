@@ -94,7 +94,8 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            align-items: center; /* 입력창 높이 정렬 */
+            align-items: center;
+            /* 입력창 높이 정렬 */
         }
 
         .radio-label {
@@ -103,7 +104,8 @@
         }
 
         .radio-label input {
-            display: none; /* 실제 라디오 버튼 숨김 */
+            display: none;
+            /* 실제 라디오 버튼 숨김 */
         }
 
         .radio-label span {
@@ -117,20 +119,21 @@
         }
 
         /* 체크되었을 때 스타일 */
-        .radio-label input:checked + span {
+        .radio-label input:checked+span {
             background-color: var(--color-secondary);
             color: white;
             border-color: var(--color-secondary);
             font-weight: bold;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
 
         /* '전체' 버튼 특별 스타일 */
-        .radio-label input[value="all"] + span {
+        .radio-label input[value="all"]+span {
             border-style: dashed;
             color: var(--color-secondary);
         }
-        .radio-label input[value="all"]:checked + span {
+
+        .radio-label input[value="all"]:checked+span {
             color: white;
             border-style: solid;
         }
@@ -145,6 +148,7 @@
             text-align: center;
             font-family: var(--font-main);
         }
+
         .custom-input:disabled {
             background-color: #eee;
             cursor: not-allowed;
@@ -171,10 +175,11 @@
             margin-top: 20px;
             font-family: var(--font-main);
         }
+
         #start-btn:hover {
             background-color: #e69528;
         }
-        
+
         /* 오류 메시지 박스 */
         #error-box {
             display: none;
@@ -238,7 +243,7 @@
         <div class="section">
             <h2>4. 규칙 선택 (선택 사항)</h2>
             <div class="options-container" id="rule-options">
-                </div>
+            </div>
         </div>
 
         <div class="section">
@@ -290,12 +295,12 @@
             const unitContainer = document.getElementById('unit-options');
             const ruleContainer = document.getElementById('rule-options');
             const unitSection = document.getElementById('unit-section');
-            
+
             // 문제 개수 관련 요소
             const countRadios = document.querySelectorAll('input[name="qCountType"]');
             const customInput = document.getElementById('custom-count-input');
 
-            // --- 데이터 추출 및 정제 (핵심 수정) ---
+            // --- 데이터 추출 및 정제 ---
             const grades = new Set();
             const rules = new Set();
 
@@ -305,20 +310,29 @@
                     grades.add(item["Year/Semester"].trim());
                 }
 
-                // 2) 규칙 수집 (중복 제거 로직 강화: .trim() 필수)
+                // 2) 규칙 수집
                 for (let i = 1; i <= 5; i++) {
-                    // 키 이름 대소문자 방어 코드
                     let ruleVal = item[`Syllable ${i} Rule`] || item[`Syllable ${i} rule`];
-                    
-                    // 값이 있고 문자열이라면 공백 제거 후 수집
+
                     if (ruleVal && typeof ruleVal === 'string' && ruleVal.trim() !== "") {
-                        rules.add(ruleVal.trim()); 
+                        let val = ruleVal.trim();
+
+                        // [수정 1] 중복 삭제: 번호가 없는 '모음 합체!' 데이터는 추가하지 않고 건너뜀
+                        if (val === "모음 합체! (모음 축약·탈락)") {
+                            continue;
+                        }
+
+                        rules.add(val);
                     }
                 }
             });
 
             const sortedGrades = [...grades].sort();
-            const sortedRules = [...rules].sort();
+            
+            // [수정 2] 정렬 로직 변경: 숫자(1, 2, ... 10)를 인식하여 정렬 (1 뒤에 10이 오지 않음)
+            const sortedRules = [...rules].sort((a, b) => 
+                a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+            );
 
             // --- 렌더링 함수 ---
             function renderRadioButtons(container, name, list, includeAll = true, allText = "전체") {
@@ -350,7 +364,7 @@
             renderRadioButtons(ruleContainer, 'rule', sortedRules, true, "- 전체 규칙 -");
 
 
-            // --- 이벤트: 학년 선택 시 단원 목록 업데이트 (오류 수정됨) ---
+            // --- 이벤트: 학년 선택 시 단원 목록 업데이트 ---
             gradeContainer.addEventListener('change', (e) => {
                 if (e.target.name !== 'grade') return;
 
@@ -361,17 +375,19 @@
                     renderRadioButtons(unitContainer, 'unit', [], true, "- 전체 단원 -");
                 } else {
                     unitSection.classList.remove('disabled-section');
-                    
+
                     // 해당 학년의 단원만 추출 (중복 제거)
                     const units = new Set();
                     quizData.forEach(item => {
-                        // 데이터의 학년과 선택한 학년이 정확히 일치하는지 비교
                         if (item["Year/Semester"] && item["Year/Semester"].trim() === selectedGrade && item["Chapter"]) {
                             units.add(item["Chapter"].trim());
                         }
                     });
-                    
-                    const sortedUnits = [...units].sort();
+
+                    // 단원명 정렬 (숫자 인식 정렬)
+                    const sortedUnits = [...units].sort((a, b) => 
+                        a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+                    );
                     renderRadioButtons(unitContainer, 'unit', sortedUnits, true, "- 전체 단원 -");
                 }
             });
@@ -396,19 +412,18 @@
                 const grade = document.querySelector('input[name="grade"]:checked')?.value || 'all';
                 const unit = document.querySelector('input[name="unit"]:checked')?.value || 'all';
                 const rule = document.querySelector('input[name="rule"]:checked')?.value || 'all';
-                
-                // 문제 개수 계산
+
                 let countVal = document.querySelector('input[name="qCountType"]:checked').value;
                 if (countVal === 'custom') {
                     countVal = customInput.value;
                     if (!countVal || countVal < 1) countVal = 10; // 방어 코드
                 }
 
-                // URL 파라미터 전달 (count 추가)
-                const params = new URLSearchParams({ 
-                    type, grade, unit, rule, count: countVal 
+                // URL 파라미터 전달
+                const params = new URLSearchParams({
+                    type, grade, unit, rule, count: countVal
                 });
-                
+
                 window.location.href = `quiz.html?${params.toString()}`;
             });
         }
