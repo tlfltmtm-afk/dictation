@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✍️ 거꾸로 받아쓰기</title>
     <style>
-        /* (기본 스타일 ...) */
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
         :root {
@@ -14,15 +13,10 @@
             --color-bg: #f7f3e9;
             --color-surface: #fff;
             --color-primary: #5cb85c;
-            /* green */
             --color-secondary: #0275d8;
-            /* blue */
             --color-warning: #f0ad4e;
-            /* orange */
             --color-info: #5bc0de;
-            /* cyan */
             --color-danger: #d9534f;
-            /* red */
             --color-text: #333;
             --color-text-light: #888;
             --color-disabled: #ccc;
@@ -67,16 +61,11 @@
             opacity: 0.8;
             transition: opacity 0.2s;
             font-size: 28px;
-            /* 이모지 크기 */
             text-decoration: none;
             color: var(--color-warning);
-            /* 이모지 색상 (일부 환경) */
         }
 
-        #info-link:hover {
-            opacity: 1;
-        }
-
+        #info-link:hover { opacity: 1; }
 
         h1 {
             color: var(--color-primary);
@@ -110,16 +99,8 @@
             user-select: none;
         }
 
-        .q-nav-btn:hover {
-            color: var(--color-primary);
-        }
-
-        .q-nav-btn.disabled {
-            color: var(--color-disabled);
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
+        .q-nav-btn:hover { color: var(--color-primary); }
+        .q-nav-btn.disabled { color: var(--color-disabled); cursor: not-allowed; opacity: 0.5; }
 
         #audio-controls-container {
             display: grid;
@@ -139,34 +120,14 @@
             transition: background-color 0.2s, opacity 0.2s;
         }
 
-        #play-1,
-        #play-3,
-        #play-5 {
-            background-color: var(--color-secondary);
-        }
-
-        #play-1:hover:not(:disabled),
-        #play-3:hover:not(:disabled),
-        #play-5:hover:not(:disabled) {
-            background-color: #025aa5;
-        }
-
-        #play-slow {
-            background-color: var(--color-info);
-        }
-
-        #play-slow:hover:not(:disabled) {
-            background-color: #4694ab;
-        }
-
-        #play-all {
-            background-color: var(--color-danger);
-        }
-
-        #play-all:hover:not(:disabled) {
-            background-color: #b0413e;
-        }
-
+        #play-1, #play-3, #play-5 { background-color: var(--color-secondary); }
+        #play-1:hover:not(:disabled), #play-3:hover:not(:disabled), #play-5:hover:not(:disabled) { background-color: #025aa5; }
+        
+        #play-slow { background-color: var(--color-info); }
+        #play-slow:hover:not(:disabled) { background-color: #4694ab; }
+        
+        #play-all { background-color: var(--color-danger); }
+        #play-all:hover:not(:disabled) { background-color: #b0413e; }
 
         #problem-list-container {
             display: flex;
@@ -246,22 +207,16 @@
             flex: 1;
         }
 
-        #submit-btn {
-            background-color: var(--color-primary);
-            flex: 2;
-        }
-
+        #submit-btn { background-color: var(--color-primary); flex: 2; }
+        #submit-btn:disabled { color: white; }
+        
         .q-nav-btn-bottom {
             background-color: #888;
             font-size: 1.5em;
             padding: 10px;
             line-height: 1.3;
         }
-
-        .q-nav-btn-bottom:hover:not(:disabled) {
-            background-color: #666;
-        }
-
+        .q-nav-btn-bottom:hover:not(:disabled) { background-color: #666; }
 
         #feedback-area {
             min-height: 24px;
@@ -272,14 +227,8 @@
             line-height: 1.6;
             text-align: center;
         }
-
-        #feedback-area.correct {
-            color: var(--color-primary);
-        }
-
-        #feedback-area.incorrect {
-            color: var(--color-danger);
-        }
+        #feedback-area.correct { color: var(--color-primary); }
+        #feedback-area.incorrect { color: var(--color-danger); }
 
         hr.divider {
             border: 0;
@@ -293,7 +242,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-top: 0;
             margin-bottom: 20px;
         }
 
@@ -309,22 +257,12 @@
             transition: background-color 0.2s, opacity 0.2s;
         }
 
-        .hint-btn:hover:not(:disabled) {
-            background-color: #e89e3a;
-        }
+        .hint-btn:hover:not(:disabled) { background-color: #e89e3a; }
+        .hint-btn.active { background-color: var(--color-hint-active); }
+        .hint-btn.active:hover:not(:disabled) { background-color: #5a6268; }
 
-        .hint-btn.active {
-            background-color: var(--color-hint-active);
-        }
-
-        .hint-btn.active:hover:not(:disabled) {
-            background-color: #5a6268;
-        }
-
-        /* --- 힌트 표시 영역 --- */
         #result-area {
             min-height: 50px;
-            padding: 0;
             margin-bottom: 25px;
             font-size: 1.1em;
             line-height: 1.6;
@@ -362,43 +300,24 @@
             word-break: keep-all;
         }
 
-        .diff-char-red {
-            color: var(--color-danger);
-            font-weight: bold;
-        }
-
-        .diff-char-black {
-            color: var(--color-text);
-        }
-
+        .diff-char-red { color: var(--color-danger); font-weight: bold; }
+        .diff-char-black { color: var(--color-text); }
 
         #hint-display-answer {
             background-color: #fdfaf2;
             border-color: var(--color-warning);
             border-width: 2px;
         }
-
-        #hint-display-answer .hint-label-box {
-            background-color: #fff;
-            border: 1px solid #f0ad4e;
-        }
+        #hint-display-answer .hint-label-box { background-color: #fff; border: 1px solid #f0ad4e; }
 
         #hint-display-sound {
             background-color: #f7faff;
             border-color: var(--color-secondary);
             border-width: 2px;
         }
+        #hint-display-sound .hint-label-box { background-color: #fff; border: 1px solid #0275d8; }
 
-        #hint-display-sound .hint-label-box {
-            background-color: #fff;
-            border: 1px solid #0275d8;
-        }
-
-
-        #hint-display-rule {
-            background-color: #f9f9f9;
-            border-color: #eee;
-        }
+        #hint-display-rule { background-color: #f9f9f9; border-color: #eee; }
 
         .rule-link-icon {
             display: inline-block;
@@ -409,13 +328,8 @@
             transition: opacity 0.2s;
             color: var(--color-secondary);
             font-size: 1.1em;
-            /* 이모지 크기 */
         }
-
-        .rule-link-icon:hover {
-            opacity: 1;
-            color: var(--color-primary);
-        }
+        .rule-link-icon:hover { opacity: 1; color: var(--color-primary); }
 
         #rule-hint-buttons {
             display: flex;
@@ -453,8 +367,6 @@
             border-color: #5a6268;
         }
 
-        /* --- (힌트 끝) --- */
-
         #navigation-area {
             display: flex;
             justify-content: space-between;
@@ -472,20 +384,14 @@
             color: white;
             transition: background-color 0.2s;
         }
-
-        #next-btn:hover {
-            background-color: #555;
-        }
+        #next-btn:hover { background-color: #555; }
 
         #back-link {
             font-size: 1.1em;
             color: var(--color-secondary);
             text-decoration: none;
         }
-
-        #back-link:hover {
-            text-decoration: underline;
-        }
+        #back-link:hover { text-decoration: underline; }
 
         [disabled] {
             background-color: var(--color-disabled) !important;
@@ -493,118 +399,46 @@
             cursor: not-allowed !important;
         }
 
-        /* --- 모달 공통 스타일 --- */
+        /* 모달 스타일 */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
+            display: none; justify-content: center; align-items: center;
             z-index: 1000;
         }
 
         .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            padding: 30px 40px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
+            background-color: white; border-radius: 15px; padding: 30px 40px;
+            text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%; max-width: 400px;
         }
 
         .modal-text {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--color-text);
-            margin-bottom: 30px;
+            font-size: 1.8em; font-weight: bold; color: var(--color-text); margin-bottom: 30px;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 15px;
-        }
+        .modal-buttons { display: flex; gap: 15px; }
 
         .modal-btn {
-            flex: 1;
-            padding: 12px;
-            font-size: 1.2em;
-            font-family: var(--font-main);
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            flex: 1; padding: 12px; font-size: 1.2em; font-family: var(--font-main);
+            font-weight: bold; border: none; border-radius: 8px; cursor: pointer;
             transition: background-color 0.2s;
         }
 
-        /* --- 1. 정답 팝업 모달 --- */
         #modal-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 0 auto 25px auto;
-            border: 15px solid var(--color-danger);
-            /* 빨간색 테두리 */
-            background-color: transparent;
-            /* 가운데 비우기 */
-            box-sizing: border-box;
-            /* 크기 유지 */
+            width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 25px auto;
+            border: 15px solid var(--color-danger); background-color: transparent; box-sizing: border-box;
         }
 
-        #modal-close-btn {
-            background-color: #aaa;
-            color: white;
-        }
+        #modal-close-btn { background-color: #aaa; color: white; }
+        #modal-close-btn:hover { background-color: #888; }
+        #modal-next-btn { background-color: var(--color-primary); color: white; }
+        #modal-next-btn:hover { background-color: #4a9e4a; }
 
-        #modal-close-btn:hover {
-            background-color: #888;
-        }
-
-        #modal-next-btn {
-            background-color: var(--color-primary);
-            color: white;
-        }
-
-        #modal-next-btn:hover {
-            background-color: #4a9e4a;
-        }
-
-        /* --- [요청 사항] 2. 퀴즈 완료 팝업 모달 --- */
-        #quiz-complete-modal-text {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--color-text);
-            margin-bottom: 30px;
-        }
-
-        #quiz-complete-close-btn {
-            background-color: #aaa;
-            color: white;
-        }
-
-        #quiz-complete-close-btn:hover {
-            background-color: #888;
-        }
-
-        #quiz-complete-home-btn {
-            background-color: var(--color-primary);
-            color: white;
-        }
-
-        #quiz-complete-home-btn:hover {
-            background-color: #4a9e4a;
-        }
-
-        /* --- (모달 끝) --- */
-
-        /* 비활성화된 제출 버튼의 텍스트 색상 */
-        #submit-btn:disabled {
-            color: white;
-        }
+        #quiz-complete-close-btn { background-color: #aaa; color: white; }
+        #quiz-complete-close-btn:hover { background-color: #888; }
+        #quiz-complete-home-btn { background-color: var(--color-primary); color: white; }
+        #quiz-complete-home-btn:hover { background-color: #4a9e4a; }
     </style>
 </head>
 
@@ -622,8 +456,7 @@
             <button id="play-all" class="audio-btn">🔊 전체</button>
         </div>
 
-        <div id="problem-list-container">
-        </div>
+        <div id="problem-list-container"></div>
 
         <div id="q-nav-container">
             <a id="prev-q-btn" class="q-nav-btn" title="이전 문제">◀</a>
@@ -675,8 +508,7 @@
     <div id="quiz-complete-modal-overlay" class="modal-overlay">
         <div id="quiz-complete-modal-content" class="modal-content">
             <div id="quiz-complete-modal-text" class="modal-text">✨ 모든 퀴즈를 완료했습니다!</div>
-            <p style="font-size: 1.1em; margin-top: -15px; margin-bottom: 30px;">축하합니다! <br>범위 선택 화면으로 돌아가<br>다른 퀴즈에
-                도전해보세요.</p>
+            <p style="font-size: 1.1em; margin-top: -15px; margin-bottom: 30px;">축하합니다! <br>범위 선택 화면으로 돌아가<br>다른 퀴즈에 도전해보세요.</p>
             <div id="quiz-complete-modal-buttons" class="modal-buttons">
                 <button id="quiz-complete-close-btn" class="modal-btn">닫기</button>
                 <button id="quiz-complete-home-btn" class="modal-btn">홈(인덱스)으로</button>
@@ -684,11 +516,12 @@
         </div>
     </div>
 
-
     <script src="database.js"></script>
 
     <script>
-        // --- 1. 전역 변수 및 DOM 요소 ---
+        /* global quizData */
+
+        // --- 1. 전역 변수 ---
         let quizSet = [];
         let currentQuestionIndex = 0;
         let currentQuestion = null;
@@ -702,121 +535,67 @@
             isPlaying: false
         };
 
+        // 힌트/설정 키값
         let keyForAudio, keyForAnswer, keyForSoundHint, keyForRules, keyForHints;
         let placeholderText;
 
+        // 힌트 상태
         let isSoundHintVisible = false;
         let isRuleHintVisible = false;
         let isAnswerHintVisible = false;
-
         let ruleHintData = {};
         let isAllRulesVisible = false;
 
         const ruleFileMap = {
-            1: 'rule01_yeonum.html',
-            2: 'rule02_eumjeol_kkwessori.html',
-            3: 'rule03_jaeumgun_dansunhwa.html',
-            4: 'rule04_doensori_doegi.html',
-            5: 'rule05_jaeum_donghwa.html',
-            6: 'rule06_gugaeumhwa.html',
-            7: 'rule07_jaeum_chukyak.html',
-            8: 'rule08_h_tallak.html',
-            9: 'rule09_moeum_chukyak.html',
-            10: 'rule10_n_cheomga.html',
-            11: 'rule11_dueum_beopchik.html',
-            12: 'rule12_ttyeossuegi.html',
-            13: 'rule13_ssangdungyi_moeum.html',
-            14: 'rule14_sori_pyogi.html'
+            1: 'rule01_yeonum.html', 2: 'rule02_eumjeol_kkwessori.html', 3: 'rule03_jaeumgun_dansunhwa.html',
+            4: 'rule04_doensori_doegi.html', 5: 'rule05_jaeum_donghwa.html', 6: 'rule06_gugaeumhwa.html',
+            7: 'rule07_jaeum_chukyak.html', 8: 'rule08_h_tallak.html', 9: 'rule09_moeum_chukyak.html',
+            10: 'rule10_n_cheomga.html', 11: 'rule11_dueum_beopchik.html', 12: 'rule12_ttyeossuegi.html',
+            13: 'rule13_ssangdungyi_moeum.html', 14: 'rule14_sori_pyogi.html'
         };
 
-        // DOM 요소 캐싱
+        // DOM Elements
         const mainContent = document.getElementById('main-content');
-
-        // 정답 모달
         const modalOverlay = document.getElementById('modal-overlay');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const modalNextBtn = document.getElementById('modal-next-btn');
-
-        // [요청 사항] 퀴즈 완료 모달
         const quizCompleteModalOverlay = document.getElementById('quiz-complete-modal-overlay');
         const quizCompleteCloseBtn = document.getElementById('quiz-complete-close-btn');
         const quizCompleteHomeBtn = document.getElementById('quiz-complete-home-btn');
-
-
         const problemListContainer = document.getElementById('problem-list-container');
         const progressIndicator = document.getElementById('progress-indicator');
         const prevQBtn = document.getElementById('prev-q-btn');
         const nextQBtn = document.getElementById('next-q-btn');
         const answerInput = document.getElementById('answer-input');
         const submitBtn = document.getElementById('submit-btn');
-
         const prevQBtnBottom = document.getElementById('prev-q-btn-bottom');
         const nextQBtnBottom = document.getElementById('next-q-btn-bottom');
-
         const feedbackArea = document.getElementById('feedback-area');
-        const resultArea = document.getElementById('result-area');
-        const nextBtn = document.getElementById('next-btn');
-        const backLink = document.getElementById('back-link');
-
         const hintDisplayAnswer = document.getElementById('hint-display-answer');
         const hintDisplaySound = document.getElementById('hint-display-sound');
         const hintDisplayRule = document.getElementById('hint-display-rule');
-
-        const hintContainer = document.getElementById('hint-container');
-
+        const nextBtn = document.getElementById('next-btn');
+        
+        // Buttons
         const playSlowBtn = document.getElementById('play-slow');
         const play1Btn = document.getElementById('play-1');
         const play3Btn = document.getElementById('play-3');
         const play5Btn = document.getElementById('play-5');
         const playAllBtn = document.getElementById('play-all');
-
         const hintSoundBtn = document.getElementById('hint-sound');
         const hintRuleBtn = document.getElementById('hint-rule');
         const hintAnswerBtn = document.getElementById('hint-answer');
 
         const allAudioButtons = [play1Btn, play3Btn, play5Btn, playSlowBtn, playAllBtn];
         const allHintButtons = [hintSoundBtn, hintRuleBtn, hintAnswerBtn];
-
         const bookIconEmoji = '📚';
 
-        // --- 텍스트 정규화 ---
+        // --- 2. 헬퍼 함수 ---
         function normalizeText(text) {
             if (typeof text !== 'string') return "";
             return text.replace(/[.,!?~"'"\[\]]/g, '');
         }
 
-        // --- 2. 페이지 초기화 ---
-        window.onload = () => {
-            try {
-                if (typeof quizData === 'undefined') {
-                    throw new Error("database.js를 불러오지 못했거나 quizData 변수가 없습니다.");
-                }
-
-                const params = new URLSearchParams(window.location.search);
-                const grade = params.get('grade');
-                const unit = params.get('unit');
-                const rule = params.get('rule');
-                const quizType = params.get('type') || 'word';
-
-                setupQuizType(quizType);
-                filterQuizSet(grade, unit, rule, quizType);
-
-                if (quizSet.length > 0) {
-                    generateProblemList();
-                    loadQuestion(0);
-                } else {
-                    handleNoQuestions();
-                }
-
-                setupEventListeners();
-
-            } catch (error) {
-                console.error("퀴즈 초기화 중 오류 발생:", error);
-                main.innerHTML = `<h1>오류 발생</h1><p>퀴즈를 불러오는 중 오류가 발생했습니다: ${error.message}</p>`;
-            }
-        };
-
-        // --- 3. 초기화 헬퍼 함수 ---
         function setupQuizType(quizType) {
             if (quizType === 'sentence') {
                 keyForAudio = "Audio File Name (Sentence)";
@@ -833,38 +612,101 @@
                 keyForHints = ["Syllable 1 Rule", "Syllable 2 rule", "Syllable 3 Rule", "Syllable 4 Rule", "Syllable 5 Rule"];
                 placeholderText = "낱말을 입력하세요";
             }
-            answerInput.placeholder = placeholderText;
+            if (answerInput) answerInput.placeholder = placeholderText;
         }
 
         function filterQuizSet(grade, unit, rule, quizType) {
+            const tempKeyForAnswer = (quizType === 'sentence') ? "Sentence Notation" : "Word Notation";
+
             quizSet = quizData.filter(item => {
                 const gradeMatch = (grade === 'all' || item["Year/Semester"] === grade);
                 const unitMatch = (unit === 'all' || item["Chapter"] === unit);
-
                 let ruleMatch = (rule === 'all');
                 if (rule !== 'all') {
-                    for (const ruleKey of keyForRules) {
-                        if (item[ruleKey] === rule) {
-                            ruleMatch = true;
-                            break;
+                    const ruleKeys = ["Syllable 1 Rule", "Syllable 2 rule", "Syllable 3 Rule", "Syllable 4 Rule", "Syllable 5 Rule"];
+                    for (const rK of ruleKeys) {
+                        if (item[rK] === rule) {
+                            ruleMatch = true; break;
                         }
                     }
                 }
-
-                const typeMatch = (quizType === 'word' || (item[keyForAnswer] && item[keyForAnswer].trim() !== ""));
-
+                const typeMatch = (quizType === 'word' || (item[tempKeyForAnswer] && item[tempKeyForAnswer].trim() !== ""));
                 return gradeMatch && unitMatch && ruleMatch && typeMatch;
             });
+        }
 
-            // 셔플
+        function shuffleQuizSet() {
             for (let i = quizSet.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [quizSet[i], quizSet[j]] = [quizSet[j], quizSet[i]];
             }
-
-            // 각 문제에 'isCompleted' 상태 추가
-            quizSet.forEach(item => item.isCompleted = false);
         }
+
+        // --- 3. 초기화 (개수 제한 적용) ---
+        window.onload = () => {
+            try {
+                if (typeof quizData === 'undefined') {
+                    throw new Error("database.js를 불러오지 못했거나 quizData 변수가 없습니다.");
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                const mode = params.get('mode');
+
+                if (mode === 'custom') {
+                    // [커스텀 모드]
+                    const customData = sessionStorage.getItem('customQuizData');
+                    if (!customData) {
+                        alert("선택된 문제가 없습니다. 홈으로 돌아갑니다.");
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    const selectedList = JSON.parse(customData);
+                    quizSet = selectedList.map(item => {
+                        const dataItem = quizData[item.index];
+                        const newItem = Object.assign({}, dataItem);
+                        newItem._quizType = item.type;
+                        newItem.isCompleted = false;
+                        return newItem;
+                    });
+                } else {
+                    // [일반 모드]
+                    const grade = params.get('grade');
+                    const unit = params.get('unit');
+                    const rule = params.get('rule');
+                    const quizType = params.get('type') || 'word';
+                    
+                    // [개수 제한 핵심 로직]
+                    const pCount = parseInt(params.get('count')) || 10;
+
+                    filterQuizSet(grade, unit, rule, quizType);
+                    
+                    quizSet.forEach(item => {
+                        item._quizType = quizType;
+                        item.isCompleted = false;
+                    });
+                    
+                    shuffleQuizSet();
+
+                    // ★ 설정한 개수만큼 자르기
+                    if (quizSet.length > pCount) {
+                        quizSet = quizSet.slice(0, pCount);
+                    }
+                }
+
+                if (quizSet.length > 0) {
+                    generateProblemList();
+                    loadQuestion(0);
+                } else {
+                    handleNoQuestions();
+                }
+
+                setupEventListeners();
+
+            } catch (error) {
+                console.error("오류 발생:", error);
+                mainContent.innerHTML = `<h1>오류 발생</h1><p>${error.message}</p>`;
+            }
+        };
 
         function generateProblemList() {
             problemListContainer.innerHTML = '';
@@ -872,18 +714,18 @@
                 const div = document.createElement('div');
                 div.id = `problem-item-${index}`;
                 div.className = 'problem-list-item blurred';
-                div.textContent = item[keyForAnswer];
+                
+                const type = item._quizType;
+                const ansKey = (type === 'sentence') ? "Sentence Notation" : "Word Notation";
+                div.textContent = item[ansKey] || "문제";
+                
                 div.onclick = () => {
-                    if (index !== currentQuestionIndex) {
-                        loadQuestion(index);
-                    }
+                    if (index !== currentQuestionIndex) loadQuestion(index);
                 };
                 problemListContainer.appendChild(div);
             });
         }
 
-
-        // --- 4. 이벤트 리스너 설정 ---
         function setupEventListeners() {
             play1Btn.onclick = () => playAudio(1, 0, 1.0);
             play3Btn.onclick = () => playAudio(3, 1000, 1.0);
@@ -893,7 +735,6 @@
 
             prevQBtn.onclick = loadPreviousQuestion;
             nextQBtn.onclick = () => loadNextQuestion(true);
-
             prevQBtnBottom.onclick = loadPreviousQuestion;
             nextQBtnBottom.onclick = () => loadNextQuestion(true);
 
@@ -902,13 +743,11 @@
                 updateHintDisplays();
                 hintSoundBtn.classList.toggle('active', isSoundHintVisible);
             };
-
             hintRuleBtn.onclick = () => {
                 isRuleHintVisible = !isRuleHintVisible;
                 updateHintDisplays();
                 hintRuleBtn.classList.toggle('active', isRuleHintVisible);
             };
-
             hintAnswerBtn.onclick = () => {
                 isAnswerHintVisible = !isAnswerHintVisible;
                 updateHintDisplays();
@@ -921,141 +760,100 @@
             };
             nextBtn.onclick = () => loadNextQuestion(false);
 
-            // 정답 모달 버튼
             modalCloseBtn.onclick = hideCorrectModal;
-            modalNextBtn.onclick = () => {
-                hideCorrectModal();
-                loadNextQuestion(false);
-            };
-
-            // [요청 사항] 퀴즈 완료 모달 버튼
+            modalNextBtn.onclick = () => { hideCorrectModal(); loadNextQuestion(false); };
             quizCompleteCloseBtn.onclick = hideQuizCompleteModal;
-            quizCompleteHomeBtn.onclick = () => {
-                window.location.href = 'index.html'; // 홈(인덱스) 페이지로 이동
-            };
+            quizCompleteHomeBtn.onclick = () => { window.location.href = 'index.html'; };
         }
 
-
-        // UI 상태를 설정하는 두 개의 새 함수
-
-        /** (A) 문제가 '미완료' 상태일 때의 UI를 설정합니다. */
-        function setUIStateActive() {
-            // 제출 관련 버튼 활성화
-            answerInput.disabled = false;
-            submitBtn.disabled = false;
-            submitBtn.textContent = "제출하기";
-
-            // 오디오/힌트 버튼 활성화
-            [...allAudioButtons, ...allHintButtons].forEach(el => el.disabled = false);
-
-            // 네비게이션 버튼 상태 업데이트
-            const isFirst = (currentQuestionIndex === 0);
-            const isLast = (currentQuestionIndex === quizSet.length - 1);
-
-            prevQBtn.classList.toggle('disabled', isFirst);
-            prevQBtnBottom.disabled = isFirst;
-            nextQBtn.classList.toggle('disabled', isLast);
-            nextQBtnBottom.disabled = isLast;
-        }
-
-        /** (B) 문제가 '학습 완료' 상태일 때의 UI를 설정합니다. (복습 가능) */
-        function setUIStateCompleted() {
-            // 제출 관련 버튼 비활성화 및 텍스트 변경
-            answerInput.disabled = true;
-            submitBtn.disabled = true;
-            submitBtn.textContent = "학습 완료";
-
-            // 오디오/힌트 버튼 활성화 (복습용)
-            [...allAudioButtons, ...allHintButtons].forEach(el => el.disabled = false);
-
-            // 네비게이션 버튼 상태 업데이트 (활성화)
-            const isFirst = (currentQuestionIndex === 0);
-            const isLast = (currentQuestionIndex === quizSet.length - 1);
-
-            prevQBtn.classList.toggle('disabled', isFirst);
-            prevQBtnBottom.disabled = isFirst;
-            nextQBtn.classList.toggle('disabled', isLast);
-            nextQBtnBottom.disabled = isLast;
-
-            // 상단 문제 목록 UI 업데이트
-            const currentProblemEl = document.getElementById(`problem-item-${currentQuestionIndex}`);
-            if (currentProblemEl) {
-                currentProblemEl.classList.remove('current', 'blurred');
-                currentProblemEl.classList.add('completed');
-            }
-        }
-
-
-        // --- 5. 핵심 기능: 문제 불러오기 ---
+        // --- 4. 문제 로드 및 UI ---
         function loadQuestion(index) {
             stopAudioLoop();
-
             currentQuestionIndex = index;
             currentQuestion = quizSet[index];
 
+            setupQuizType(currentQuestion._quizType);
+
             progressIndicator.textContent = `문제 ${index + 1} / ${quizSet.length}`;
 
-            // 1. 오디오 설정
+            // 오디오 설정
             const audioFileName = currentQuestion[keyForAudio];
             if (!audioFileName || audioFileName.trim() === "") {
-                feedbackArea.innerHTML = "오디오 파일 정보가 없습니다. 이 문제는 건너뜁니다.";
+                feedbackArea.innerHTML = "오디오 없음. 건너뜁니다.";
                 feedbackArea.className = 'incorrect';
                 disableAllControls(false);
-                setTimeout(() => loadNextQuestion(true), 2000);
+                setTimeout(() => loadNextQuestion(true), 1500);
                 return;
             }
 
-            // Determine folder based on quiz type
-            const audioFolder = keyForAudio.includes("Word") ? "audio1" : "audio2";
-
-            currentAudio = new Audio(`${audioFolder}/${audioFileName}`);
+            const audioFolder = (currentQuestion._quizType === 'word') ? "audio1" : "audio2";
+            let cleanAudioName = audioFileName.trim();
+            // 확장자가 없으면 .wav로 자동 처리
+            if(!cleanAudioName.toLowerCase().endsWith('.wav') && !cleanAudioName.toLowerCase().endsWith('.mp3')) {
+                cleanAudioName += '.wav';
+            }
+            
+            currentAudio = new Audio(`${audioFolder}/${encodeURIComponent(cleanAudioName)}`);
             currentAudio.onerror = () => {
-                feedbackArea.innerHTML = `오디오 파일을 찾을 수 없습니다.`;
+                feedbackArea.innerHTML = "오디오 파일을 찾을 수 없습니다.";
                 feedbackArea.className = 'incorrect';
                 allAudioButtons.forEach(btn => btn.disabled = true);
             };
 
-            // 2. 문제 목록 UI 업데이트
             const prevProblemEl = document.querySelector('.problem-list-item.current');
-            if (prevProblemEl) {
-                prevProblemEl.classList.remove('current');
-            }
+            if (prevProblemEl) prevProblemEl.classList.remove('current');
             const currentProblemEl = document.getElementById(`problem-item-${currentQuestionIndex}`);
             if (currentProblemEl) {
                 currentProblemEl.classList.add('current');
-                // 만약 이미 완료된 문제라면 'completed' 클래스도 추가
                 if (currentQuestion.isCompleted) {
                     currentProblemEl.classList.remove('blurred');
                     currentProblemEl.classList.add('completed');
                 }
             }
 
-            // 3. UI 초기화 (힌트 등)
             answerInput.value = "";
             feedbackArea.innerHTML = "";
             feedbackArea.className = "";
-
-            isSoundHintVisible = false;
-            isRuleHintVisible = false;
-            isAnswerHintVisible = false;
+            
+            isSoundHintVisible = false; isRuleHintVisible = false; isAnswerHintVisible = false;
             updateHintDisplays();
-
             allHintButtons.forEach(btn => btn.classList.remove('active'));
-
-            ruleHintData = {};
-            isAllRulesVisible = false;
-
+            ruleHintData = {}; isAllRulesVisible = false;
             nextBtn.style.display = 'none';
 
-            // 4. 문제 상태에 따라 UI 설정
-            if (currentQuestion.isCompleted) {
-                setUIStateCompleted();
-            } else {
-                setUIStateActive();
-            }
+            if (currentQuestion.isCompleted) setUIStateCompleted();
+            else setUIStateActive();
         }
 
-        // --- 6. 핵심 기능: 오디오 재생 ---
+        function setUIStateActive() {
+            answerInput.disabled = false;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "제출하기";
+            [...allAudioButtons, ...allHintButtons].forEach(el => el.disabled = false);
+
+            const isFirst = (currentQuestionIndex === 0);
+            const isLast = (currentQuestionIndex === quizSet.length - 1);
+            prevQBtn.classList.toggle('disabled', isFirst);
+            prevQBtnBottom.disabled = isFirst;
+            nextQBtn.classList.toggle('disabled', isLast);
+            nextQBtnBottom.disabled = isLast;
+        }
+
+        function setUIStateCompleted() {
+            answerInput.disabled = true;
+            submitBtn.disabled = true;
+            submitBtn.textContent = "학습 완료";
+            [...allAudioButtons, ...allHintButtons].forEach(el => el.disabled = false);
+
+            const isFirst = (currentQuestionIndex === 0);
+            const isLast = (currentQuestionIndex === quizSet.length - 1);
+            prevQBtn.classList.toggle('disabled', isFirst);
+            prevQBtnBottom.disabled = isFirst;
+            nextQBtn.classList.toggle('disabled', isLast);
+            nextQBtnBottom.disabled = isLast;
+        }
+
+        // --- 5. 오디오 재생 로직 ---
         function playAudio(times, interval, rate) {
             stopAudioLoop();
             if (!currentAudio || !currentAudio.src) return;
@@ -1066,23 +864,20 @@
                 currentAudio.playbackRate = rate;
                 currentAudio.currentTime = 0;
                 currentAudio.onended = () => {
-                    if (count < times) { audioPlayLoopId = setTimeout(play, interval); }
-                    else { audioPlayLoopId = null; }
+                    if (count < times) audioPlayLoopId = setTimeout(play, interval);
+                    else audioPlayLoopId = null;
                 };
-                currentAudio.play().catch(e => { console.error("오디오 재생 오류:", e); });
+                currentAudio.play().catch(e => console.error("재생 오류", e));
             }
             play();
         }
 
         function playAllAudio() {
             stopAudioLoop();
-
             allAudioPlayer.isPlaying = true;
             allAudioPlayer.index = 0;
-
             [play1Btn, play3Btn, play5Btn, playSlowBtn, submitBtn, prevQBtnBottom, nextQBtnBottom].forEach(btn => btn.disabled = true);
             playAllBtn.textContent = "■ 중지";
-
             playNextInAll();
         }
 
@@ -1093,7 +888,9 @@
             }
 
             const item = quizSet[allAudioPlayer.index];
-            const audioFileName = item[keyForAudio];
+            const type = item._quizType;
+            const audioKey = (type === 'sentence') ? "Audio File Name (Sentence)" : "Audio File Name (Word)";
+            const audioFileName = item[audioKey];
 
             if (!audioFileName) {
                 allAudioPlayer.index++;
@@ -1106,9 +903,13 @@
             document.getElementById(`problem-item-${allAudioPlayer.index}`).classList.add('current');
             progressIndicator.textContent = `전체 듣기 (${allAudioPlayer.index + 1} / ${quizSet.length})`;
 
-            const audioFolder = keyForAudio.includes("Word") ? "audio1" : "audio2";
+            const audioFolder = (type === 'word') ? "audio1" : "audio2";
+            let cleanName = audioFileName.trim();
+            if(!cleanName.toLowerCase().endsWith('.wav') && !cleanName.toLowerCase().endsWith('.mp3')) {
+                cleanName += '.wav';
+            }
 
-            allAudioPlayer.audio = new Audio(`${audioFolder}/${audioFileName}`);
+            allAudioPlayer.audio = new Audio(`${audioFolder}/${encodeURIComponent(cleanName)}`);
             allAudioPlayer.audio.onended = () => {
                 allAudioPlayer.index++;
                 allAudioPlayer.timeoutId = setTimeout(playNextInAll, 1000);
@@ -1123,280 +924,177 @@
         function stopAudioLoop() {
             if (audioPlayLoopId) { clearTimeout(audioPlayLoopId); audioPlayLoopId = null; }
             if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; }
-
             stopPlayAllAudio();
         }
 
         function stopPlayAllAudio() {
             if (!allAudioPlayer.isPlaying) return;
-
             allAudioPlayer.isPlaying = false;
-            if (allAudioPlayer.timeoutId) { clearTimeout(allAudioPlayer.timeoutId); }
-            if (allAudioPlayer.audio) { allAudioPlayer.audio.pause(); }
-
+            if (allAudioPlayer.timeoutId) clearTimeout(allAudioPlayer.timeoutId);
+            if (allAudioPlayer.audio) allAudioPlayer.audio.pause();
             allAudioPlayer.timeoutId = null;
             allAudioPlayer.audio = null;
-
             playAllBtn.textContent = "🔊 전체";
             loadQuestion(currentQuestionIndex);
         }
 
-        // --- 7. 힌트 UI 통합 업데이트 ---
+        // --- 6. 힌트 및 정답 로직 ---
         function updateHintDisplays() {
             if (!currentQuestion) return;
-
             const correctAnswer = currentQuestion[keyForAnswer];
             const soundHint = currentQuestion[keyForSoundHint];
+            const normalizedCorrect = normalizeText(correctAnswer);
+            const normalizedSound = normalizeText(soundHint);
 
-            const normalizedCorrectAnswer = normalizeText(correctAnswer);
-            const normalizedSoundHint = normalizeText(soundHint);
-
-            let answerContentHtml = `<div class="hint-content-box">${normalizedCorrectAnswer}</div>`;
-            let soundContentHtml = `<div class="hint-content-box">${normalizedSoundHint}</div>`;
+            let answerHtml = `<div class="hint-content-box">${normalizedCorrect}</div>`;
+            let soundHtml = `<div class="hint-content-box">${normalizedSound}</div>`;
 
             if (isAnswerHintVisible && isSoundHintVisible) {
-                const diff = generateDiffHtml(normalizedCorrectAnswer, normalizedSoundHint);
-                answerContentHtml = `<div class="hint-content-box">${diff.html1}</div>`;
-                soundContentHtml = `<div class="hint-content-box">${diff.html2}</div>`;
+                const diff = generateDiffHtml(normalizedCorrect, normalizedSound);
+                answerHtml = `<div class="hint-content-box">${diff.html1}</div>`;
+                soundHtml = `<div class="hint-content-box">${diff.html2}</div>`;
             }
 
             if (isAnswerHintVisible) {
-                hintDisplayAnswer.innerHTML = `<div class="hint-label-box"><strong>👀 정답</strong></div>
-                                                ${answerContentHtml}`;
+                hintDisplayAnswer.innerHTML = `<div class="hint-label-box"><strong>👀 정답</strong></div>${answerHtml}`;
                 hintDisplayAnswer.style.display = 'grid';
-            } else {
-                hintDisplayAnswer.style.display = 'none';
-            }
+            } else hintDisplayAnswer.style.display = 'none';
 
             if (isSoundHintVisible) {
-                hintDisplaySound.innerHTML = `<div class="hint-label-box"><strong>💡 소리 힌트</strong></div>
-                                                ${soundContentHtml}`;
+                hintDisplaySound.innerHTML = `<div class="hint-label-box"><strong>💡 소리 힌트</strong></div>${soundHtml}`;
                 hintDisplaySound.style.display = 'grid';
-            } else {
-                hintDisplaySound.style.display = 'none';
-            }
+            } else hintDisplaySound.style.display = 'none';
 
             if (isRuleHintVisible) {
                 showRuleHintOptions();
                 hintDisplayRule.style.display = 'block';
-            } else {
-                hintDisplayRule.innerHTML = '';
-                hintDisplayRule.style.display = 'none';
-            }
+            } else hintDisplayRule.style.display = 'none';
         }
 
         function generateDiffHtml(str1, str2) {
-            let html1 = '';
-            let html2 = '';
+            let html1 = '', html2 = '';
             const len = Math.max(str1.length, str2.length);
-
             for (let i = 0; i < len; i++) {
-                const char1 = str1[i] || '';
-                const char2 = str2[i] || '';
-
-                if (char1 === char2) {
-                    html1 += `<span class="diff-char-black">${char1}</span>`;
-                    html2 += `<span class="diff-char-black">${char2}</span>`;
+                const c1 = str1[i] || '', c2 = str2[i] || '';
+                if (c1 === c2) {
+                    html1 += `<span class="diff-char-black">${c1}</span>`;
+                    html2 += `<span class="diff-char-black">${c2}</span>`;
                 } else {
-                    html1 += `<span class="diff-char-red">${char1}</span>`;
-                    html2 += `<span class="diff-char-red">${char2}</span>`;
+                    html1 += `<span class="diff-char-red">${c1}</span>`;
+                    html2 += `<span class="diff-char-red">${c2}</span>`;
                 }
             }
-            return { html1: html1, html2: html2 };
+            return { html1, html2 };
         }
 
-
-        // --- 7. 규칙 힌트 UI 생성 ---
         function showRuleHintOptions() {
-            let ruleHtml = '<strong style="margin-top:0;">🧩 적용 규칙</strong>';
-            let ruleButtonsHtml = '<div id="rule-hint-buttons">';
+            let ruleHtml = '<strong style="margin-top:0;">🧩 적용 규칙</strong><div id="rule-hint-buttons">';
+            let hasRules = false;
 
-            let ruleCount = 0;
-
-            if (Object.keys(ruleHintData).length === 0) {
-                if (!currentQuestion) return;
+            if (Object.keys(ruleHintData).length === 0 && currentQuestion) {
                 for (let i = 0; i < 5; i++) {
-                    const ruleTitleKey = keyForRules[i];
-                    const ruleHintKey = keyForHints[i];
-
-                    if (currentQuestion[ruleTitleKey]) {
-                        const title = currentQuestion[ruleTitleKey];
-                        const hint = currentQuestion[ruleHintKey] || "힌트가 없습니다.";
-
-                        ruleHintData[title] = {
-                            title: title,
-                            hint: hint.replace(/'/g, "\\'"),
+                    const titleKey = keyForRules[i];
+                    const hintKey = keyForHints[i];
+                    if (currentQuestion[titleKey]) {
+                        ruleHintData[currentQuestion[titleKey]] = {
+                            title: currentQuestion[titleKey],
+                            hint: (currentQuestion[hintKey] || "힌트 없음").replace(/'/g, "\\'"),
                             visible: false
                         };
                     }
                 }
             }
-
-            const ruleTitles = Object.keys(ruleHintData);
-            ruleCount = ruleTitles.length;
-
-            if (ruleCount === 0) {
-                ruleHtml += "<p>이 문제에 등록된 규칙 힌트가 없습니다.</p>";
-            } else {
-                ruleButtonsHtml += `<button class="rule-hint-btn show-all ${isAllRulesVisible ? 'active' : ''}" 
-                                            onclick="toggleAllRules(this)">전체</button>`;
-
-                ruleTitles.forEach((title, index) => {
-                    const data = ruleHintData[title];
-
-                    const ruleNumMatch = title.match(/^(\d+)번/);
-                    const buttonText = ruleNumMatch ? `규칙 ${ruleNumMatch[1]}` : `규칙 ${index + 1}`;
-
-                    ruleButtonsHtml += `<button class="rule-hint-btn ${data.visible ? 'active' : ''}" 
-                                                onclick="toggleRuleHint('${title}', this)">${buttonText}</button>`;
-                });
-
-                ruleHtml += ruleButtonsHtml + '</div>';
-                ruleHtml += '<div id="rule-hint-text-area" style="margin-top: 15px;"></div>';
+            
+            const titles = Object.keys(ruleHintData);
+            if (titles.length === 0) {
+                hintDisplayRule.innerHTML = "<p>등록된 규칙 힌트가 없습니다.</p>";
+                return;
             }
 
+            ruleHtml += `<button class="rule-hint-btn show-all ${isAllRulesVisible?'active':''}" onclick="toggleAllRules(this)">전체</button>`;
+            titles.forEach((t, idx) => {
+                const d = ruleHintData[t];
+                const match = t.match(/^(\d+)번/);
+                const btnText = match ? `규칙 ${match[1]}` : `규칙 ${idx+1}`;
+                ruleHtml += `<button class="rule-hint-btn ${d.visible?'active':''}" onclick="toggleRuleHint('${t}', this)">${btnText}</button>`;
+            });
+            ruleHtml += '</div><div id="rule-hint-text-area" style="margin-top: 15px;"></div>';
             hintDisplayRule.innerHTML = ruleHtml;
-
             renderRuleHintText();
         }
 
         function toggleRuleHint(title, btn) {
-            const data = ruleHintData[title];
-            data.visible = !data.visible;
+            ruleHintData[title].visible = !ruleHintData[title].visible;
+            btn.classList.toggle('active', ruleHintData[title].visible);
             renderRuleHintText();
-            btn.classList.toggle('active', data.visible);
         }
-
         function toggleAllRules(btn) {
             isAllRulesVisible = !isAllRulesVisible;
-
-            for (const title in ruleHintData) {
-                ruleHintData[title].visible = isAllRulesVisible;
-            }
-            renderRuleHintText();
+            for(let t in ruleHintData) ruleHintData[t].visible = isAllRulesVisible;
             showRuleHintOptions();
         }
-
         function renderRuleHintText() {
-            const textArea = document.getElementById('rule-hint-text-area');
-            if (!textArea) return;
-
-            textArea.innerHTML = '';
-
-            for (const title in ruleHintData) {
-                const data = ruleHintData[title];
-                if (data.visible) {
-                    const displayTitle = data.title.replace(/^(.*?번)(?=[^ ])/g, '$1_');
-
-                    let linkHtml = '';
-                    const ruleNumMatch = data.title.match(/^(\d+)번/);
-                    if (ruleNumMatch && ruleNumMatch[1]) {
-                        const ruleNum = parseInt(ruleNumMatch[1], 10);
-                        const linkFile = ruleFileMap[ruleNum];
-                        if (linkFile) {
-                            linkHtml = `<a href="rules/${linkFile}" class="rule-link-icon" target="_blank" title="자세히 보기">${bookIconEmoji}</a>`;
-                        }
+            const area = document.getElementById('rule-hint-text-area');
+            if(!area) return;
+            area.innerHTML = '';
+            for(let t in ruleHintData) {
+                const d = ruleHintData[t];
+                if(d.visible) {
+                    const match = d.title.match(/^(\d+)번/);
+                    let link = '';
+                    if(match && ruleFileMap[match[1]]) {
+                        link = `<a href="rules/${ruleFileMap[match[1]]}" class="rule-link-icon" target="_blank">${bookIconEmoji}</a>`;
                     }
-
-                    textArea.innerHTML += `<div style="margin-bottom: 10px;">
-                            <strong style="color:var(--color-secondary);">${displayTitle}</strong>
-                            ${linkHtml}
-                            <br>
-                            <span>${data.hint.replace(/\\'/g, "'")}</span>
-                        </div>`;
+                    area.innerHTML += `<div style="margin-bottom:10px;"><strong style="color:var(--color-secondary);">${d.title}</strong>${link}<br><span>${d.hint.replace(/\\'/g,"'")}</span></div>`;
                 }
             }
         }
 
-
-        // --- 8. 핵심 기능: 정답 확인 및 처리 ---
         function checkAnswer() {
-            const normalizedUserAnswer = normalizeText(answerInput.value.trim());
-            const normalizedCorrectAnswer = normalizeText(currentQuestion[keyForAnswer]);
-
-            if (normalizedUserAnswer === normalizedCorrectAnswer) {
+            const userAns = normalizeText(answerInput.value.trim());
+            const correctAns = normalizeText(currentQuestion[keyForAnswer]);
+            if (userAns === correctAns) {
                 currentQuestion.isCompleted = true;
                 setUIStateCompleted();
-
-                // [요청 사항] 모든 퀴즈가 완료되었는지 확인
-                checkIfAllCompleted();
-
+                const allDone = quizSet.every(q => q.isCompleted);
+                if (allDone) showQuizCompleteModal();
+                else showCorrectModal();
             } else {
-                feedbackArea.innerHTML = "😥 아닙니다. 다시 생각해보세요. (힌트를 사용해볼까요?)";
+                feedbackArea.innerHTML = "😥 아닙니다. 다시 생각해보세요.";
                 feedbackArea.className = 'incorrect';
                 answerInput.focus();
-            }
-        }
-
-        // [요청 사항] 모든 퀴즈 완료 여부 확인 함수 (신규)
-        function checkIfAllCompleted() {
-            // .every()는 모든 요소가 조건을 만족할 때 true를 반환
-            const allCompleted = quizSet.every(item => item.isCompleted === true);
-
-            if (allCompleted) {
-                // 모든 퀴즈를 완료했으면, '퀴즈 완료' 팝업을 띄웁니다.
-                showQuizCompleteModal();
-            } else {
-                // 아직 남았으면, '정답' 팝업을 띄웁니다.
-                showCorrectModal();
             }
         }
 
         function showCorrectModal() {
             mainContent.classList.add('grayscale');
             modalOverlay.style.display = 'flex';
-
-            if (currentQuestionIndex === quizSet.length - 1) {
-                modalNextBtn.style.display = 'none';
-            } else {
-                modalNextBtn.style.display = 'block';
-            }
+            modalNextBtn.style.display = (currentQuestionIndex === quizSet.length - 1) ? 'none' : 'block';
         }
-
         function hideCorrectModal() {
             mainContent.classList.remove('grayscale');
             modalOverlay.style.display = 'none';
-
-            // [요청 사항] 이 부분에서 'handleQuizComplete' 호출 로직 제거
-            // (이미 'checkIfAllCompleted'가 처리함)
         }
-
         function showQuizCompleteModal() {
             mainContent.classList.add('grayscale');
             quizCompleteModalOverlay.style.display = 'flex';
         }
-
         function hideQuizCompleteModal() {
             mainContent.classList.remove('grayscale');
             quizCompleteModalOverlay.style.display = 'none';
         }
-
         function handleNoQuestions() {
-            mainContent.innerHTML = `<h1>문제가 없습니다</h1>
-                                     <p>선택하신 조건에 해당하는 문제가 없습니다.</p>
-                                     <a href="index.html" style="display:inline-block; margin-top:20px; padding:10px 20px; background-color:#5cb85c; color:white; text-decoration:none; border-radius:5px;">돌아가기</a>`;
+            mainContent.innerHTML = `<h1>문제가 없습니다</h1><p>조건에 해당하는 문제가 없습니다.</p><a href="index.html" style="display:inline-block; margin-top:20px; padding:10px 20px; background-color:#5cb85c; color:white; text-decoration:none; border-radius:5px;">돌아가기</a>`;
         }
-
         function disableAllControls(disable) {
             [answerInput, submitBtn, ...allAudioButtons, ...allHintButtons].forEach(el => el.disabled = disable);
         }
-
-        function loadNextQuestion(autoPlay) {
-            if (currentQuestionIndex < quizSet.length - 1) {
-                loadQuestion(currentQuestionIndex + 1);
-                if (autoPlay) {
-                    // 자동 재생 로직이 필요하다면 여기에 추가
-                    // playAudio(1, 0, 1.0); 
-                }
-            }
+        function loadNextQuestion(auto) {
+            if (currentQuestionIndex < quizSet.length - 1) loadQuestion(currentQuestionIndex + 1);
         }
-
         function loadPreviousQuestion() {
-            if (currentQuestionIndex > 0) {
-                loadQuestion(currentQuestionIndex - 1);
-            }
+            if (currentQuestionIndex > 0) loadQuestion(currentQuestionIndex - 1);
         }
-
     </script>
 </body>
 
