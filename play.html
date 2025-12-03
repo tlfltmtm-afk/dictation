@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>되받쓰 - 받아쓰기</title>
+    <title>되받쓰 - 되돌리는 받아쓰기</title>
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
     <meta name="theme-color" content="#FFD700">
@@ -740,8 +741,9 @@
 
             // --- 1단계 (기본) 소리 HTML ---
             // 텍스트 + 버튼(ON)
+            // 변경: flex-col 추가하여 세로 배치
             let soundHtmlBasic = `<div class="hint-content-box">
-                                    <div class="flex items-center justify-center gap-2">
+                                    <div class="flex flex-col items-center justify-center gap-2">
                                         <span>${normalizedSound}</span>
                                         <button class="stage2-trigger-btn" onclick="toggleStage2Hint()" title="추가 힌트 보기">👆</button>
                                     </div>
@@ -750,12 +752,13 @@
             // --- 2단계 (Diff) 소리 HTML ---
             const diff = generateDiffHtml(normalizedCorrect, normalizedSound);
             
-            // 정답 박스용 (버튼 없음, 가로 배치)
+            // 정답 박스용 (버튼 없음, 가로 배치 유지 - 단, hint-content-box 자체가 flex-col이므로 내부 div는 그냥 둠)
             let answerHtmlDiff = `<div class="hint-content-box"><div>${diff.html1}</div></div>`;
             
-            // 소리 박스용 (2차 힌트: Diff 텍스트 + 버튼(OFF), 가로 배치)
+            // 소리 박스용 (2차 힌트: Diff 텍스트 + 버튼(OFF), 세로 배치)
+            // 변경: flex-col 추가하여 세로 배치
             let soundHtmlDiff = `<div class="hint-content-box">
-                                    <div class="flex items-center justify-center gap-2">
+                                    <div class="flex flex-col items-center justify-center gap-2">
                                         <div>${diff.html2}</div>
                                         <button class="stage2-trigger-btn" onclick="toggleStage2Hint()" title="기본 힌트로 보기">👆</button>
                                     </div>
