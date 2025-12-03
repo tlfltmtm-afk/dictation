@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>되받쓰 - 되돌리는 받아쓰기</title>
+    <title>되받쓰 - 받아쓰기</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
     <meta name="theme-color" content="#FFD700">
@@ -81,7 +81,7 @@
         .diff-char-red { color: #DC2626; font-weight: bold; }
         .diff-char-black { color: #1F2937; }
 
-        /* 힌트 박스 그리드 레이아웃 (JS 로직 유지) */
+        /* 힌트 박스 그리드 레이아웃 */
         .hint-display {
             display: none;
             background-color: white;
@@ -106,10 +106,14 @@
         }
         .hint-content-box {
             padding: 12px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; 
+            flex-direction: column; /* 세로 정렬을 위해 변경 */
+            align-items: center; 
+            justify-content: center;
             font-size: 1.1rem;
             word-break: keep-all;
             text-align: center;
+            gap: 8px; /* 텍스트와 버튼 사이 간격 */
         }
 
         /* 모달 스타일 */
@@ -145,6 +149,23 @@
             opacity: 0; visibility: hidden; transition: opacity 0.2s; pointer-events: none;
         }
         .tooltip-container:hover::after { opacity: 1; visibility: visible; }
+
+        /* 추가 힌트 버튼 (2단계) 스타일 */
+        .stage2-trigger-btn {
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background-color: #EFF6FF; /* blue-50 */
+            color: #2563EB; /* blue-600 */
+            border: 1px dashed #BFDBFE; /* blue-200 */
+            cursor: pointer;
+            transition: all 0.2s;
+            /* margin-top: 4px; 제거 */
+        }
+        .stage2-trigger-btn:hover {
+            background-color: #DBEAFE;
+            border-color: #3B82F6;
+        }
     </style>
 </head>
 
@@ -209,6 +230,7 @@
         </div>
 
         <div id="result-area" class="space-y-3 mb-10">
+            <!-- 순서 변경: 정답이 소리보다 위에 오도록 배치 -->
             <div id="hint-display-answer" class="hint-display two-column border-amber-400 ring-2 ring-amber-100"></div>
             <div id="hint-display-sound" class="hint-display two-column border-blue-200"></div>
             <div id="hint-display-rule" class="hint-display p-4 bg-gray-50"></div>
@@ -273,6 +295,7 @@
 
         // 힌트 상태
         let isSoundHintVisible = false;
+        let isSoundHintStage2Visible = false; // 소리 힌트 2단계(빨간색 강조) 활성화 여부
         let isRuleHintVisible = false;
         let isAnswerHintVisible = false;
         let ruleHintData = {};
@@ -471,20 +494,33 @@
             prevQBtnBottom.onclick = loadPreviousQuestion;
             nextQBtnBottom.onclick = () => loadNextQuestion(true);
 
+            // 소리 힌트 토글
             hintSoundBtn.onclick = () => {
                 isSoundHintVisible = !isSoundHintVisible;
+                // 소리 힌트 버튼을 다시 껐다 켜면 1단계(기본)부터 시작
+                if (!isSoundHintVisible) {
+                    isSoundHintStage2Visible = false;
+                }
                 updateHintDisplays();
                 hintSoundBtn.classList.toggle('bg-amber-100', isSoundHintVisible);
                 hintSoundBtn.classList.toggle('border-amber-400', isSoundHintVisible);
             };
+
+            // 규칙 힌트 토글
             hintRuleBtn.onclick = () => {
                 isRuleHintVisible = !isRuleHintVisible;
                 updateHintDisplays();
                 hintRuleBtn.classList.toggle('bg-amber-100', isRuleHintVisible);
                 hintRuleBtn.classList.toggle('border-amber-400', isRuleHintVisible);
             };
+
+            // 정답 보기 토글
             hintAnswerBtn.onclick = () => {
                 isAnswerHintVisible = !isAnswerHintVisible;
+                // 정답 보기 활성화 시 자동으로 소리 힌트 2단계도 같이 활성화되어야 함 (단, 토글 가능)
+                if(isAnswerHintVisible) {
+                    isSoundHintStage2Visible = true;
+                }
                 updateHintDisplays();
                 hintAnswerBtn.classList.toggle('bg-amber-100', isAnswerHintVisible);
                 hintAnswerBtn.classList.toggle('border-amber-400', isAnswerHintVisible);
@@ -551,7 +587,12 @@
             feedbackArea.innerHTML = "";
             feedbackArea.className = "";
             
-            isSoundHintVisible = false; isRuleHintVisible = false; isAnswerHintVisible = false;
+            // 힌트 초기화
+            isSoundHintVisible = false; 
+            isSoundHintStage2Visible = false; // 2단계 초기화
+            isRuleHintVisible = false; 
+            isAnswerHintVisible = false;
+            
             updateHintDisplays();
             allHintButtons.forEach(btn => {
                 btn.classList.remove('bg-amber-100', 'border-amber-400');
@@ -682,36 +723,79 @@
         }
 
         // --- 6. 힌트 및 정답 로직 ---
+        
+        // 2단계 힌트(빨간색 표시) 토글 함수
+        function toggleStage2Hint() {
+            isSoundHintStage2Visible = !isSoundHintStage2Visible;
+            updateHintDisplays();
+        }
+
         function updateHintDisplays() {
             if (!currentQuestion) return;
+            
             const correctAnswer = currentQuestion[keyForAnswer];
             const soundHint = currentQuestion[keyForSoundHint];
             const normalizedCorrect = normalizeText(correctAnswer);
             const normalizedSound = normalizeText(soundHint);
 
-            let answerHtml = `<div class="hint-content-box">${normalizedCorrect}</div>`;
-            let soundHtml = `<div class="hint-content-box">${normalizedSound}</div>`;
+            // --- 1단계 (기본) 소리 HTML ---
+            // 텍스트 + 버튼(ON)
+            let soundHtmlBasic = `<div class="hint-content-box">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span>${normalizedSound}</span>
+                                        <button class="stage2-trigger-btn" onclick="toggleStage2Hint()" title="추가 힌트 보기">👆</button>
+                                    </div>
+                                  </div>`;
 
-            if (isAnswerHintVisible && isSoundHintVisible) {
-                const diff = generateDiffHtml(normalizedCorrect, normalizedSound);
-                answerHtml = `<div class="hint-content-box">${diff.html1}</div>`;
-                soundHtml = `<div class="hint-content-box">${diff.html2}</div>`;
+            // --- 2단계 (Diff) 소리 HTML ---
+            const diff = generateDiffHtml(normalizedCorrect, normalizedSound);
+            
+            // 정답 박스용 (버튼 없음, 가로 배치)
+            let answerHtmlDiff = `<div class="hint-content-box"><div>${diff.html1}</div></div>`;
+            
+            // 소리 박스용 (2차 힌트: Diff 텍스트 + 버튼(OFF), 가로 배치)
+            let soundHtmlDiff = `<div class="hint-content-box">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <div>${diff.html2}</div>
+                                        <button class="stage2-trigger-btn" onclick="toggleStage2Hint()" title="기본 힌트로 보기">👆</button>
+                                    </div>
+                                 </div>`;
+            
+            // 현재 상태에 따른 소리 힌트 선택
+            let currentSoundHtml = isSoundHintStage2Visible ? soundHtmlDiff : soundHtmlBasic;
+
+            // 1. 정답 보기가 활성화된 경우
+            if (isAnswerHintVisible) {
+                // 정답 박스 표시
+                hintDisplayAnswer.innerHTML = `<div class="hint-label-box text-amber-800">👀 정답</div>${answerHtmlDiff}`;
+                hintDisplayAnswer.style.display = 'grid';
+
+                // 소리 힌트 박스 표시 (현재 단계에 맞춰 표시)
+                hintDisplaySound.innerHTML = `<div class="hint-label-box text-blue-700 bg-blue-50 border-r border-blue-200">💡 소리</div>${currentSoundHtml}`;
+                hintDisplaySound.style.display = 'grid';
+            } 
+            // 2. 정답 보기는 꺼져있지만, 소리 힌트가 켜진 경우
+            else if (isSoundHintVisible) {
+                // 정답 박스 숨김
+                hintDisplayAnswer.style.display = 'none';
+
+                // 소리 힌트 박스 표시 (현재 단계에 맞춰 표시)
+                hintDisplaySound.innerHTML = `<div class="hint-label-box text-blue-700 bg-blue-50 border-r border-blue-200">💡 소리</div>${currentSoundHtml}`;
+                hintDisplaySound.style.display = 'grid';
+            } 
+            // 3. 둘 다 꺼진 경우
+            else {
+                hintDisplayAnswer.style.display = 'none';
+                hintDisplaySound.style.display = 'none';
             }
 
-            if (isAnswerHintVisible) {
-                hintDisplayAnswer.innerHTML = `<div class="hint-label-box text-amber-800">👀 정답</div>${answerHtml}`;
-                hintDisplayAnswer.style.display = 'grid';
-            } else hintDisplayAnswer.style.display = 'none';
-
-            if (isSoundHintVisible) {
-                hintDisplaySound.innerHTML = `<div class="hint-label-box text-blue-700 bg-blue-50 border-r border-blue-200">💡 소리</div>${soundHtml}`;
-                hintDisplaySound.style.display = 'grid';
-            } else hintDisplaySound.style.display = 'none';
-
+            // 규칙 힌트 표시 (독립적)
             if (isRuleHintVisible) {
                 showRuleHintOptions();
                 hintDisplayRule.style.display = 'block';
-            } else hintDisplayRule.style.display = 'none';
+            } else {
+                hintDisplayRule.style.display = 'none';
+            }
         }
 
         function generateDiffHtml(str1, str2) {
