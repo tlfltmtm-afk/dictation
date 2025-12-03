@@ -1,433 +1,140 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👑 거꾸로 받아쓰기 (범위 설정)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <title>되받쓰 _ 홈</title>
+    <!-- 아이콘이 있다면 아래 href 경로를 수정하세요 -->
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 폰트: Paperlogy -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text-css"/>
+    
+    <meta name="theme-color" content="#FFD700">
     <style>
-        :root {
-            --font-main: 'Gowun Dodum', sans-serif;
-            --color-bg: #f7f3e9;
-            --color-surface: #fff;
-            --color-primary: #5cb85c;
-            --color-secondary: #0275d8;
-            --color-warning: #f0ad4e;
-            --color-text: #333;
-            --color-border: #ddd;
-        }
-
+        html { scroll-behavior: smooth; }
         body {
-            font-family: var(--font-main);
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            min-height: 100vh;
-        }
-
-        main {
-            background-color: var(--color-surface);
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            width: 100%;
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 30px;
-        }
-
-        /* 헤더 스타일 */
-        .header-area {
-            position: relative;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: var(--color-primary);
-            margin: 0;
-            font-size: 1.8em;
-        }
-
-        .top-links {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: #FFFDE7; /* 연한 노란색 배경 유지 */
+            color: #333333;
+            min-height: 100vh; 
             display: flex;
-            gap: 15px;
-        }
-
-        .icon-link {
-            text-decoration: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .icon-link:hover {
-            transform: scale(1.2);
-        }
-
-        /* 섹션 스타일 */
-        .section {
-            margin-bottom: 25px;
-            padding: 20px;
-            border: 1px solid var(--color-border);
-            border-radius: 10px;
-            background-color: #fafafa;
-        }
-
-        .section h2 {
-            font-size: 1.2em;
-            margin-top: 0;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--color-primary);
-            padding-bottom: 10px;
-            color: #555;
-        }
-
-        /* 라디오 버튼 디자인 */
-        .options-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            /* 입력창 높이 정렬 */
+            padding-bottom: 5vh;
+            gap: 2.5rem;
         }
 
-        .radio-label {
-            display: inline-block;
+        /* 원형 버튼 스타일 */
+        .circle-button {
+            display: flex;
+            flex-direction: column;
+            width: 35vw; /* 모바일에서 조금 더 꽉 차게 보이도록 조정 (4개 배치 고려) */
+            height: 35vw;
+            max-width: 130px;
+            max-height: 130px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            flex-shrink: 0; 
+            background-color: white;
             cursor: pointer;
         }
 
-        .radio-label input {
-            display: none;
-            /* 실제 라디오 버튼 숨김 */
+        .button-icon {
+            font-size: 14vw; /* 아이콘 크기 */
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .button-text {
+            font-size: 4.5vw;
+            font-weight: 700;
+            color: #1f2937;
         }
 
-        .radio-label span {
-            display: block;
-            padding: 10px 15px;
-            background-color: #fff;
-            border: 2px solid var(--color-border);
-            border-radius: 8px;
-            font-size: 1em;
-            transition: all 0.2s;
+        /* 태블릿/PC 반응형 */
+        @media (min-width: 768px) {
+            .circle-button {
+                width: 140px;
+                height: 140px;
+            }
+            .button-icon {
+                font-size: 3.5rem;
+            }
+            .button-text {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* 호버 효과 */
+        .circle-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* hover 시 배경색이 흰색으로 변하는 것을 방지하고 원래 색 유지 (투명도 조절 등 원하시면 수정 가능) */
+            filter: brightness(0.98); 
         }
 
-        /* 체크되었을 때 스타일 */
-        .radio-label input:checked+span {
-            background-color: var(--color-secondary);
-            color: white;
-            border-color: var(--color-secondary);
-            font-weight: bold;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        /* '전체' 버튼 특별 스타일 */
-        .radio-label input[value="all"]+span {
-            border-style: dashed;
-            color: var(--color-secondary);
-        }
-
-        .radio-label input[value="all"]:checked+span {
-            color: white;
-            border-style: solid;
-        }
-
-        /* 입력창 스타일 (퀴즈 개수) */
-        .custom-input {
-            width: 60px;
-            padding: 8px;
-            font-size: 1em;
-            border: 2px solid var(--color-border);
-            border-radius: 8px;
-            text-align: center;
-            font-family: var(--font-main);
-        }
-
-        .custom-input:disabled {
-            background-color: #eee;
-            cursor: not-allowed;
-        }
-
-        /* 비활성화 섹션 스타일 */
-        .disabled-section {
-            opacity: 0.5;
-            pointer-events: none;
-            background-color: #eee;
-        }
-
-        /* 시작 버튼 */
-        #start-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--color-warning);
-            color: white;
-            font-size: 1.3em;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-family: var(--font-main);
-        }
-
-        #start-btn:hover {
-            background-color: #e69528;
-        }
-
-        /* 오류 메시지 박스 */
-        #error-box {
-            display: none;
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            border: 1px solid #ef9a9a;
-        }
+        /* 기존 '비법' 버튼 강조 스타일 제거 (개별 색상 적용을 위해) */
     </style>
 </head>
-
-<body>
-    <main>
-        <div id="error-box"></div>
-
-        <div class="header-area">
-            <h1>✍️ 퀴즈 설정</h1>
-            <div class="top-links">
-                <a href="toc.html" class="icon-link" title="목차 보기">📑</a>
-                <a href="rules.html" class="icon-link" title="규칙 보기">📚</a>
-            </div>
+<body class="antialiased">
+    
+    <!-- 헤더 영역 -->
+    <header class="relative text-center px-4 z-0 mt-4 md:mt-10">
+        <!-- 배경 이미지 (원본 파일명 유지) -->
+        <div class="absolute -top-24 md:-top-32 left-1/2 transform -translate-x-1/2 w-[130%] max-w-none -z-10 flex justify-center items-center pointer-events-none select-none">
+            <!-- 이미지가 없을 경우를 대비해 onerror 추가 -->
+            <img src="sub back.png" onerror="this.style.display='none'" alt="" class="w-full h-auto object-contain opacity-80">
         </div>
 
-        <div class="section">
-            <h2>1. 퀴즈 유형</h2>
-            <div class="options-container">
-                <label class="radio-label">
-                    <input type="radio" name="quizType" value="word" checked>
-                    <span>낱말 퀴즈</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="quizType" value="sentence">
-                    <span>문장 퀴즈</span>
-                </label>
-            </div>
-        </div>
+        <h1 class="text-6xl md:text-8xl font-extrabold text-[#FF8C00] drop-shadow-sm tracking-tight relative z-10">되받쓰</h1>
+        <p class="mt-4 text-xl md:text-2xl text-gray-600 font-bold relative z-10">되돌리는 받아쓰기</p>
+    </header>
 
-        <div class="section">
-            <h2>2. 학년 / 학기</h2>
-            <div class="options-container" id="grade-options">
-                <label class="radio-label">
-                    <input type="radio" name="grade" value="all" checked>
-                    <span>로딩 중...</span>
-                </label>
-            </div>
-        </div>
+    <!-- 메인 메뉴 영역 (버튼 4개) -->
+    <main class="w-full px-4 relative z-10 mt-6">
+        <!-- 2열 그리드 형태로 배치 -->
+        <div class="grid grid-cols-2 gap-6 md:flex md:justify-center md:gap-8 max-w-4xl mx-auto place-items-center">
+            
+            <!-- 1. 급수 (링크: test.html, 아이콘: 123) - 연한 하늘색 -->
+            <a href="test.html" class="circle-button" style="background-color: #E3F2FD;" title="급수별 학습">
+                <span class="button-icon">🔢</span>
+                <span class="button-text">급수</span>
+            </a>
 
-        <div class="section disabled-section" id="unit-section">
-            <h2>3. 단원 선택</h2>
-            <div class="options-container" id="unit-options">
-                <label class="radio-label">
-                    <input type="radio" name="unit" value="all" checked>
-                    <span>- 전체 단원 -</span>
-                </label>
-            </div>
-        </div>
+            <!-- 2. 목차 (링크: list.html) - 연한 초록색 -->
+            <a href="list.html" class="circle-button" style="background-color: #E8F5E9;" title="학습 목차">
+                <span class="button-icon">📑</span>
+                <span class="button-text">목차</span>
+            </a>
 
-        <div class="section">
-            <h2>4. 규칙 선택 (선택 사항)</h2>
-            <div class="options-container" id="rule-options">
-            </div>
-        </div>
+            <!-- 3. 퀴즈 (링크: quiz.html, 아이콘: 부저) - 연한 분홍색 -->
+            <a href="quiz.html" class="circle-button" style="background-color: #FFEBEE;" title="퀴즈 풀기">
+                <span class="button-icon">🚨</span>
+                <span class="button-text">퀴즈</span>
+            </a>
 
-        <div class="section">
-            <h2>5. 퀴즈 생성 개수</h2>
-            <div class="options-container">
-                <label class="radio-label">
-                    <input type="radio" name="qCountType" value="5" checked>
-                    <span>5개</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="qCountType" value="10">
-                    <span>10개</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="qCountType" value="custom">
-                    <span>직접 입력</span>
-                </label>
-                <input type="number" id="custom-count-input" class="custom-input" min="1" max="50" value="20" disabled>
-            </div>
-        </div>
+            <!-- 4. 비법 (링크: rules.html) - 연한 보라색 -->
+            <a href="rules.html" class="circle-button group" style="background-color: #F3E5F5;" title="공부 비법">
+                <!-- hover 시 아이콘 커지는 효과 -->
+                <span class="button-icon group-hover:scale-110 transition-transform">🔑</span>
+                <span class="button-text">비법</span>
+            </a>
 
-        <button id="start-btn">🚀 퀴즈 시작하기</button>
+        </div>
     </main>
 
-    <script src="database.js"></script>
+    <!-- 하단 카피라이트 -->
+    <div class="mt-12 text-center text-xs md:text-sm text-gray-400 relative z-10">
+        <p>&copy; 2025 왕관유자쌤. All rights reserved.</p>
+    </div>
 
-    <script>
-        // --- 1. 안전 장치: 데이터 로드 확인 ---
-        const errorBox = document.getElementById('error-box');
-
-        function showError(msg) {
-            errorBox.style.display = 'block';
-            errorBox.innerHTML = `⚠️ 오류 발생: ${msg}`;
-            console.error(msg);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // database.js 연결 확인
-            if (typeof quizData === 'undefined') {
-                showError("데이터 파일(database.js)이 연결되지 않았습니다.<br>database.js 파일 맨 앞에 'const quizData =' 가 있는지 확인해주세요.");
-                return;
-            }
-            initApp();
-        });
-
-        // --- 2. 앱 초기화 로직 ---
-        function initApp() {
-            const gradeContainer = document.getElementById('grade-options');
-            const unitContainer = document.getElementById('unit-options');
-            const ruleContainer = document.getElementById('rule-options');
-            const unitSection = document.getElementById('unit-section');
-
-            // 문제 개수 관련 요소
-            const countRadios = document.querySelectorAll('input[name="qCountType"]');
-            const customInput = document.getElementById('custom-count-input');
-
-            // --- 데이터 추출 및 정제 ---
-            const grades = new Set();
-            const rules = new Set();
-
-            quizData.forEach(item => {
-                // 1) 학년 수집
-                if (item["Year/Semester"]) {
-                    grades.add(item["Year/Semester"].trim());
-                }
-
-                // 2) 규칙 수집
-                for (let i = 1; i <= 5; i++) {
-                    let ruleVal = item[`Syllable ${i} Rule`] || item[`Syllable ${i} rule`];
-
-                    if (ruleVal && typeof ruleVal === 'string' && ruleVal.trim() !== "") {
-                        let val = ruleVal.trim();
-
-                        // [수정 1] 중복 삭제: 번호가 없는 '모음 합체!' 데이터는 추가하지 않고 건너뜀
-                        if (val === "모음 합체! (모음 축약·탈락)") {
-                            continue;
-                        }
-
-                        rules.add(val);
-                    }
-                }
-            });
-
-            const sortedGrades = [...grades].sort();
-            
-            // [수정 2] 정렬 로직 변경: 숫자(1, 2, ... 10)를 인식하여 정렬 (1 뒤에 10이 오지 않음)
-            const sortedRules = [...rules].sort((a, b) => 
-                a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
-            );
-
-            // --- 렌더링 함수 ---
-            function renderRadioButtons(container, name, list, includeAll = true, allText = "전체") {
-                container.innerHTML = ''; // 초기화
-
-                if (includeAll) {
-                    const allHtml = `
-                        <label class="radio-label">
-                            <input type="radio" name="${name}" value="all" checked>
-                            <span>${allText}</span>
-                        </label>
-                    `;
-                    container.insertAdjacentHTML('beforeend', allHtml);
-                }
-
-                list.forEach(val => {
-                    const html = `
-                        <label class="radio-label">
-                            <input type="radio" name="${name}" value="${val}">
-                            <span>${val}</span>
-                        </label>
-                    `;
-                    container.insertAdjacentHTML('beforeend', html);
-                });
-            }
-
-            // 초기 렌더링 (학년, 규칙)
-            renderRadioButtons(gradeContainer, 'grade', sortedGrades, true, "전체 학년/학기");
-            renderRadioButtons(ruleContainer, 'rule', sortedRules, true, "- 전체 규칙 -");
-
-
-            // --- 이벤트: 학년 선택 시 단원 목록 업데이트 ---
-            gradeContainer.addEventListener('change', (e) => {
-                if (e.target.name !== 'grade') return;
-
-                const selectedGrade = e.target.value;
-
-                if (selectedGrade === 'all') {
-                    unitSection.classList.add('disabled-section');
-                    renderRadioButtons(unitContainer, 'unit', [], true, "- 전체 단원 -");
-                } else {
-                    unitSection.classList.remove('disabled-section');
-
-                    // 해당 학년의 단원만 추출 (중복 제거)
-                    const units = new Set();
-                    quizData.forEach(item => {
-                        if (item["Year/Semester"] && item["Year/Semester"].trim() === selectedGrade && item["Chapter"]) {
-                            units.add(item["Chapter"].trim());
-                        }
-                    });
-
-                    // 단원명 정렬 (숫자 인식 정렬)
-                    const sortedUnits = [...units].sort((a, b) => 
-                        a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
-                    );
-                    renderRadioButtons(unitContainer, 'unit', sortedUnits, true, "- 전체 단원 -");
-                }
-            });
-
-
-            // --- 이벤트: 문제 개수 (직접 입력 활성화/비활성화) ---
-            countRadios.forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    if (e.target.value === 'custom') {
-                        customInput.disabled = false;
-                        customInput.focus();
-                    } else {
-                        customInput.disabled = true;
-                    }
-                });
-            });
-
-
-            // --- 이벤트: 시작 버튼 ---
-            document.getElementById('start-btn').addEventListener('click', () => {
-                const type = document.querySelector('input[name="quizType"]:checked')?.value || 'word';
-                const grade = document.querySelector('input[name="grade"]:checked')?.value || 'all';
-                const unit = document.querySelector('input[name="unit"]:checked')?.value || 'all';
-                const rule = document.querySelector('input[name="rule"]:checked')?.value || 'all';
-
-                let countVal = document.querySelector('input[name="qCountType"]:checked').value;
-                if (countVal === 'custom') {
-                    countVal = customInput.value;
-                    if (!countVal || countVal < 1) countVal = 10; // 방어 코드
-                }
-
-                // URL 파라미터 전달
-                const params = new URLSearchParams({
-                    type, grade, unit, rule, count: countVal
-                });
-
-                window.location.href = `quiz.html?${params.toString()}`;
-            });
-        }
-    </script>
 </body>
-
 </html>

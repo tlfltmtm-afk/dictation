@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>어사문 - 급수표</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <meta name="theme-color" content="#FFD700">
+    <style>
+        body {
+            font-family: "Paperlogy", sans-serif;
+            background-color: #FFFBEB; /* amber-50 */
+            padding-top: 70px;
+            padding-bottom: 40px;
+            color: #4B5563;
+        }
+
+        /* 상단바 스타일 */
+        .header-fixed {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            background-color: #FFD700; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 56px;
+        }
+        
+        .nav-link {
+            display: flex; align-items: center; justify-content: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #1F2937;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: #FBBF24; /* amber-400 */
+        }
+        
+        /* 툴팁 */
+        .tooltip-container { position: relative; }
+        .tooltip-container::after {
+            content: attr(data-tooltip);
+            position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8); color: white;
+            padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; white-space: nowrap;
+            opacity: 0; visibility: hidden; transition: opacity 0.2s; pointer-events: none;
+        }
+        .tooltip-container:hover::after { opacity: 1; visibility: visible; }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen">
+
+    <header class="header-fixed flex items-center justify-center px-4">
+        <nav class="flex items-center space-x-3">
+            <a href="index.html" class="nav-link tooltip-container" aria-label="홈" data-tooltip="홈으로 이동">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            </a>
+            <a href="test.html" class="nav-link active" aria-label="급수">급수</a>
+            <a href="list.html" class="nav-link" aria-label="목차">목차</a>
+            <a href="quiz.html" class="nav-link" aria-label="퀴즈">퀴즈</a>
+            <a href="rules.html" class="nav-link" aria-label="비법">비법</a>
+        </nav>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-4">
+        
+        <div class="text-center mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold text-amber-900 mb-2 flex items-center justify-center gap-2">
+                <span>🔢</span> 급수표
+            </h1>
+            <p class="text-amber-700 text-sm mb-6">학년을 선택하고 도전할 급수를 클릭하세요.</p>
+
+            <div class="inline-flex bg-white p-1 rounded-full shadow-sm border border-amber-200">
+                <button onclick="setGrade(1)" id="btn-1" class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-200">1학년</button>
+                <button onclick="setGrade(2)" id="btn-2" class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-200">2학년</button>
+                <button onclick="setGrade(3)" id="btn-3" class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-200">3학년</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div id="col-left" class="flex flex-col gap-5"></div>
+            <div id="col-right" class="flex flex-col gap-5"></div>
+        </div>
+    </main>
+
+    <div id="toast" class="hidden fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800/90 backdrop-blur text-white px-6 py-3 rounded-full shadow-2xl flex items-center z-50 transition-opacity duration-300 pointer-events-none">
+        <i data-lucide="check" class="w-5 h-5 mr-2 text-green-400"></i>
+        <span id="toast-msg" class="font-medium text-sm">메시지</span>
+    </div>
+
+    <script>
+        let activeGrade = 1;
+
+        // 색상 설정 (학년별) - 테마에 맞게 약간 부드러운 톤으로 조정
+        const styles = {
+            1: { 
+                activeBtn: 'bg-indigo-500 text-white shadow-md transform scale-105', 
+                inactiveBtn: 'text-gray-500 hover:text-indigo-500 hover:bg-indigo-50',
+                bar: 'bg-indigo-500', 
+                text: 'text-indigo-600', 
+                hoverGradient: 'group-hover:to-indigo-50/50' 
+            },
+            2: { 
+                activeBtn: 'bg-emerald-500 text-white shadow-md transform scale-105', 
+                inactiveBtn: 'text-gray-500 hover:text-emerald-500 hover:bg-emerald-50',
+                bar: 'bg-emerald-500', 
+                text: 'text-emerald-600', 
+                hoverGradient: 'group-hover:to-emerald-50/50' 
+            },
+            3: { 
+                activeBtn: 'bg-rose-500 text-white shadow-md transform scale-105', 
+                inactiveBtn: 'text-gray-500 hover:text-rose-500 hover:bg-rose-50',
+                bar: 'bg-rose-500', 
+                text: 'text-rose-500', 
+                hoverGradient: 'group-hover:to-rose-50/50' 
+            }
+        };
+
+        // 더미 텍스트 (배경 장식용)
+        const dummySentences = [
+            "학교에 다녀왔습니다.", "친구와 사이좋게.", 
+            "선생님 말씀.", "밥을 맛있게.", "즐거운 생활."
+        ];
+
+        // 초기화
+        window.onload = () => {
+            renderLevels();
+            lucide.createIcons();
+        };
+
+        // 학년 변경 함수
+        function setGrade(grade) {
+            activeGrade = grade;
+            
+            // 버튼 스타일 업데이트
+            [1, 2, 3].forEach(g => {
+                const btn = document.getElementById(`btn-${g}`);
+                const style = styles[activeGrade]; // 현재 활성 학년의 스타일 테마를 따름 (선택 사항)
+                
+                // 각 버튼 자신만의 스타일 적용
+                const targetStyle = styles[grade];
+                
+                if (g === grade) {
+                    btn.className = `px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 ${styles[g].activeBtn}`;
+                } else {
+                    btn.className = `px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 ${styles[g].inactiveBtn}`;
+                }
+            });
+
+            // 카드 다시 그리기
+            renderLevels();
+        }
+
+        // 카드 렌더링 함수
+        function renderLevels() {
+            const colLeft = document.getElementById('col-left');
+            const colRight = document.getElementById('col-right');
+            colLeft.innerHTML = '';
+            colRight.innerHTML = '';
+
+            const currentStyle = styles[activeGrade];
+
+            // 1~12급 카드 생성
+            for (let i = 1; i <= 12; i++) {
+                const cardHtml = createCardHTML(i, currentStyle);
+                if (i <= 6) colLeft.innerHTML += cardHtml;
+                else colRight.innerHTML += cardHtml;
+            }
+            
+            // 아이콘 새로고침
+            lucide.createIcons();
+        }
+
+        // 개별 카드 HTML 생성
+        function createCardHTML(level, style) {
+            // 배경용 흐릿한 텍스트 생성
+            const dummyHtml = dummySentences.map(t => `<span class="text-[10px] text-gray-400 mr-2 opacity-50 inline-block">${t}</span>`).join('');
+            
+            return `
+            <div onclick="alert('${activeGrade}학년 ${level}급 학습 페이지로 이동합니다.')" 
+                class="group relative bg-white rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-amber-100 cursor-pointer h-24 w-full animate-fade-in">
+                
+                <div class="absolute inset-0 p-4 select-none pointer-events-none overflow-hidden bg-white">
+                    <div class="opacity-30 filter blur-[2px] transform scale-105 whitespace-nowrap leading-relaxed">
+                        ${dummyHtml} ${dummyHtml} <br> ${dummyHtml}
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent opacity-90 group-hover:opacity-80 transition-opacity ${style.hoverGradient}"></div>
+                </div>
+
+                <div class="absolute inset-0 flex items-center justify-between px-6 z-10">
+                    <div class="flex items-center space-x-5">
+                        <div class="w-2 h-12 rounded-full shadow-sm ${style.bar} group-hover:scale-y-110 transition-transform"></div>
+                        
+                        <div>
+                            <span class="text-sm text-gray-400 font-bold block mb-0.5">${activeGrade}학년</span>
+                            <span class="text-3xl font-black tracking-tight ${style.text}">${level}급</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="event.stopPropagation(); copyToClipboard('${level}급')" 
+                        class="p-2.5 bg-amber-50 hover:bg-amber-100 text-amber-400 hover:text-amber-600 rounded-full transition-colors" title="링크 복사">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>`;
+        }
+
+        // 토스트 메시지
+        function triggerToast(message) {
+            const toast = document.getElementById('toast');
+            const msgSpan = document.getElementById('toast-msg');
+            msgSpan.innerText = message;
+            toast.classList.remove('hidden');
+            toast.classList.remove('opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2000);
+        }
+
+        // 클립보드 복사
+        function copyToClipboard(text) {
+            // 실제 구현 시에는 해당 급수의 URL을 생성해야 함
+            const url = `${window.location.origin}/test.html?grade=${activeGrade}&level=${text.replace('급','')}`;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                triggerToast(`${activeGrade}학년 ${text} 주소가 복사되었습니다.`);
+            }).catch(err => {
+                console.error('복사 실패', err);
+                triggerToast('복사에 실패했습니다.');
+            });
+        }
+    </script>
+</body>
+</html>

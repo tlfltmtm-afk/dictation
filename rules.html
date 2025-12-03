@@ -2,234 +2,233 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👑 거꾸로 받아쓰기 (규칙 사전)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>어사문 - 규칙 사전</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <meta name="theme-color" content="#FFD700">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
-
         body {
-            font-family: 'Gowun Dodum', sans-serif;
-            background-color: #f7f3e9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
+            font-family: "Paperlogy", sans-serif;
+            background-color: #FFFBEB; /* amber-50 */
+            padding-top: 70px;
+            padding-bottom: 40px;
+            color: #4B5563;
         }
 
-        main {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            width: 100%;
-            max-width: 900px; /* 카드 배치를 위해 너비 확장 */
-            margin: 20px auto;
-            padding: 30px 40px; /* 좌우 패딩 추가 */
-            box-sizing: border-box;
+        /* 상단바 스타일 */
+        .header-fixed {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            background-color: #FFD700; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 56px;
         }
-
-        h1 {
-            color: #d9534f;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 30px;
-        }
-
-        /* '메인으로' 돌아가기 버튼 */
-        .back-btn {
-            display: inline-block;
-            font-size: 1.1em;
-            color: #0275d8;
+        
+        .nav-link {
+            display: flex; align-items: center; justify-content: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #1F2937;
             text-decoration: none;
-            margin-bottom: 30px;
+            transition: background-color 0.2s;
         }
-        .back-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* --- (신규) 규칙 그룹 소제목 --- */
-        .rule-group-title {
-            font-size: 1.8em;
-            color: #444;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #f0ad4e; /* index.html의 주황색 버튼과 통일 */
-        }
-        .rule-group-title:first-of-type {
-            margin-top: 10px;
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: #FBBF24; /* amber-400 */
         }
 
-        /* --- (신규) 규칙 카드 그리드 --- */
-        .rule-grid {
-            display: grid;
-            /* 최소 250px, 최대 1fr로 3열 자동 배치 */
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+        /* 툴팁 */
+        .tooltip-container { position: relative; }
+        .tooltip-container::after {
+            content: attr(data-tooltip);
+            position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8); color: white;
+            padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; white-space: nowrap;
+            opacity: 0; visibility: hidden; transition: opacity 0.2s; pointer-events: none;
         }
+        .tooltip-container:hover::after { opacity: 1; visibility: visible; }
 
-        /* --- (신규) 규칙 카드 --- */
+        /* 규칙 카드 스타일 */
         .rule-card {
-            display: block;
-            background-color: #fdfdfd;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 20px;
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 4px solid #0275d8; /* 하단 포인트 컬러 */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .rule-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-
-        /* 카드 내부 요소 */
-        .card-number {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #0275d8;
-        }
-        
-        .card-icon {
-            font-size: 2.5em;
-            float: right; /* 아이콘을 오른쪽으로 */
-            margin-top: -10px;
-        }
-        
-        .card-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin: 10px 0 5px 0;
-            color: #333;
-        }
-        
-        .card-subtitle {
-            font-size: 1.0em;
-            color: #777;
-            margin: 0;
-        }
-
-        /* 모바일 대응 */
-        @media (max-width: 600px) {
-            main {
-                padding: 20px;
-            }
-            .rule-grid {
-                /* 모바일에선 1열 */
-                grid-template-columns: 1fr;
-            }
-        }
-        
     </style>
 </head>
-<body>
 
-    <main>
-        <h1>📚 규칙 사전</h1>
-        <a href="index.html" class="back-btn">← 메인 화면으로 돌아가기</a>
+<body class="antialiased">
 
-        <h2 class="rule-group-title">1부: 받침의 이동과 변신</h2>
-        <div class="rule-grid">
-            <a href="rules/rule01_yeonum.html" class="rule-card">
-                <span class="card-icon">🚚</span>
-                <span class="card-number">1</span>
-                <h3 class="card-title">이사 가는 받침</h3>
-                <p class="card-subtitle">(연음)</p>
+    <header class="header-fixed flex items-center justify-center px-4">
+        <nav class="flex items-center space-x-3">
+            <a href="index.html" class="nav-link tooltip-container" aria-label="홈" data-tooltip="홈으로 이동">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             </a>
-            <a href="rules/rule02_eumjeol_kkwessori.html" class="rule-card">
-                <span class="card-icon">👑</span>
-                <span class="card-number">2</span>
-                <h3 class="card-title">받침 대장</h3>
-                <p class="card-subtitle">(음절의 끝소리)</p>
-            </a>
-            <a href="rules/rule03_jaeumgun_dansunhwa.html" class="rule-card">
-                <span class="card-icon">🫣</span>
-                <span class="card-number">3</span>
-                <h3 class="card-title">숨바꼭질 받침</h3>
-                <p class="card-subtitle">(자음군 단순화)</p>
-            </a>
-        </div>
+            <a href="test.html" class="nav-link" aria-label="급수">급수</a>
+            <a href="list.html" class="nav-link" aria-label="목차">목차</a>
+            <a href="quiz.html" class="nav-link" aria-label="퀴즈">퀴즈</a>
+            <a href="rules.html" class="nav-link active" aria-label="비법">비법</a>
+        </nav>
+    </header>
 
-        <h2 class="rule-group-title">2부: 소리의 변신과 합체</h2>
-        <div class="rule-grid">
-            <a href="rules/rule04_doensori_doegi.html" class="rule-card">
-                <span class="card-icon">💪</span>
-                <span class="card-number">4</span>
-                <h3 class="card-title">힘센 소리</h3>
-                <p class="card-subtitle">(된소리되기)</p>
-            </a>
-            <a href="rules/rule05_jaeum_donghwa.html" class="rule-card">
-                <span class="card-icon">🤝</span>
-                <span class="card-number">5</span>
-                <h3 class="card-title">짝꿍 소리</h3>
-                <p class="card-subtitle">(자음동화)</p>
-            </a>
-            <a href="rules/rule06_gugaeumhwa.html" class="rule-card">
-                <span class="card-icon">✨</span>
-                <span class="card-number">6</span>
-                <h3 class="card-title">'이' 마법</h3>
-                <p class="card-subtitle">(구개음화)</p>
-            </a>
-             <a href="rules/rule07_jaeum_chukyak.html" class="rule-card">
-                <span class="card-icon">🤖</span>
-                <span class="card-number">7</span>
-                <h3 class="card-title">거센소리 로봇</h3>
-                <p class="card-subtitle">(자음 축약)</p>
-            </a>
-        </div>
-       
-        <h2 class="rule-group-title">3부: 소리의 탈락과 첨가</h2>
-        <div class="rule-grid">
-            <a href="rules/rule08_h_tallak.html" class="rule-card">
-                <span class="card-icon">👻</span>
-                <span class="card-number">8</span>
-                <h3 class="card-title">투명인간 'ㅎ'</h3>
-                <p class="card-subtitle">(ㅎ 탈락)</p>
-            </a>
-            <a href="rules/rule09_moeum_chukyak.html" class="rule-card">
-                <span class="card-icon">🪢</span>
-                <span class="card-number">9</span>
-                <h3 class="card-title">모음 합체!</h3>
-                <p class="card-subtitle">(모음 축약·탈락)</p>
-            </a>
-            <a href="rules/rule10_n_cheomga.html" class="rule-card">
-                <span class="card-icon">🎁</span>
-                <span class="card-number">10</span>
-                <h3 class="card-title">깜짝! 'ㄴ' 소리</h3>
-                <p class="card-subtitle">(ㄴ 첨가)</p>
-            </a>
-            <a href="rules/rule11_dueum_beopchik.html" class="rule-card">
-                <span class="card-icon">😊</span>
-                <span class="card-number">11</span>
-                <h3 class="card-title">부끄럼쟁이 첫소리</h3>
-                <p class="card-subtitle">(두음 법칙)</p>
-            </a>
-        </div>
+    <main class="max-w-5xl mx-auto p-4">
+        <section class="text-center mb-10 mt-4">
+            <h1 class="text-3xl font-bold text-amber-900 mb-3 flex items-center justify-center gap-2">
+                <span>📚</span> 규칙 사전
+            </h1>
+            <p class="text-amber-700 text-sm mb-6">받아쓰기 왕이 되는 14가지 비법을 확인해보세요.</p>
+        </section>
 
-        <h2 class="rule-group-title">4부: 실전 받아쓰기</h2>
-        <div class="rule-grid">
-            <a href="rules/rule12_ttyeossuegi.html" class="rule-card">
-                <span class="card-icon">😮‍💨</span>
-                <span class="card-number">12</span>
-                <h3 class="card-title">단어 숨쉬기</h3>
-                <p class="card-subtitle">(띄어쓰기)</p>
-            </a>
-            <a href="rules/rule13_ssangdungyi_moeum.html" class="rule-card">
-                <span class="card-icon">👯</span>
-                <span class="card-number">13</span>
-                <h3 class="card-title">쌍둥이 모음</h3>
-                <p class="card-subtitle">(혼동하기 쉬운 모음)</p>
-            </a>
-            <a href="rules/rule14_sori_pyogi.html" class="rule-card">
-                <span class="card-icon">👕</span>
-                <span class="card-number">14</span>
-                <h3 class="card-title">소리 옷, 진짜 옷</h3>
-                <p class="card-subtitle">(소리와 표기)</p>
-            </a>
-        </div>
+        <section class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="bg-amber-500 text-white rounded-lg px-3 py-1 font-bold text-sm mr-3">1부</div>
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-amber-200 flex-grow pb-1">받침의 이동과 변신</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <a href="rules/rule01_yeonum.html" class="rule-card group block bg-white border border-amber-100 rounded-2xl p-6 border-b-4 border-b-amber-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-md">RULE 1</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🚚</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">이사 가는 받침</h3>
+                    <p class="text-gray-500 font-medium text-sm">(연음)</p>
+                </a>
+                <a href="rules/rule02_eumjeol_kkwessori.html" class="rule-card group block bg-white border border-amber-100 rounded-2xl p-6 border-b-4 border-b-amber-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-md">RULE 2</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">👑</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">받침 대장</h3>
+                    <p class="text-gray-500 font-medium text-sm">(음절의 끝소리)</p>
+                </a>
+                <a href="rules/rule03_jaeumgun_dansunhwa.html" class="rule-card group block bg-white border border-amber-100 rounded-2xl p-6 border-b-4 border-b-amber-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-md">RULE 3</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🫣</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">숨바꼭질 받침</h3>
+                    <p class="text-gray-500 font-medium text-sm">(자음군 단순화)</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="bg-blue-500 text-white rounded-lg px-3 py-1 font-bold text-sm mr-3">2부</div>
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-blue-200 flex-grow pb-1">소리의 변신과 합체</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <a href="rules/rule04_doensori_doegi.html" class="rule-card group block bg-white border border-blue-100 rounded-2xl p-6 border-b-4 border-b-blue-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-md">RULE 4</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">💪</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">힘센 소리</h3>
+                    <p class="text-gray-500 font-medium text-sm">(된소리되기)</p>
+                </a>
+                <a href="rules/rule05_jaeum_donghwa.html" class="rule-card group block bg-white border border-blue-100 rounded-2xl p-6 border-b-4 border-b-blue-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-md">RULE 5</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🤝</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">짝꿍 소리</h3>
+                    <p class="text-gray-500 font-medium text-sm">(자음동화)</p>
+                </a>
+                <a href="rules/rule06_gugaeumhwa.html" class="rule-card group block bg-white border border-blue-100 rounded-2xl p-6 border-b-4 border-b-blue-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-md">RULE 6</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">✨</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">'이' 마법</h3>
+                    <p class="text-gray-500 font-medium text-sm">(구개음화)</p>
+                </a>
+                <a href="rules/rule07_jaeum_chukyak.html" class="rule-card group block bg-white border border-blue-100 rounded-2xl p-6 border-b-4 border-b-blue-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-md">RULE 7</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🤖</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">거센소리 로봇</h3>
+                    <p class="text-gray-500 font-medium text-sm">(자음 축약)</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="bg-green-500 text-white rounded-lg px-3 py-1 font-bold text-sm mr-3">3부</div>
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-green-200 flex-grow pb-1">소리의 탈락과 첨가</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <a href="rules/rule08_h_tallak.html" class="rule-card group block bg-white border border-green-100 rounded-2xl p-6 border-b-4 border-b-green-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-md">RULE 8</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">👻</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-green-600 transition-colors">투명인간 'ㅎ'</h3>
+                    <p class="text-gray-500 font-medium text-sm">(ㅎ 탈락)</p>
+                </a>
+                <a href="rules/rule09_moeum_chukyak.html" class="rule-card group block bg-white border border-green-100 rounded-2xl p-6 border-b-4 border-b-green-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-md">RULE 9</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🪢</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-green-600 transition-colors">모음 합체!</h3>
+                    <p class="text-gray-500 font-medium text-sm">(모음 축약·탈락)</p>
+                </a>
+                <a href="rules/rule10_n_cheomga.html" class="rule-card group block bg-white border border-green-100 rounded-2xl p-6 border-b-4 border-b-green-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-md">RULE 10</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🎁</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-green-600 transition-colors">깜짝! 'ㄴ' 소리</h3>
+                    <p class="text-gray-500 font-medium text-sm">(ㄴ 첨가)</p>
+                </a>
+                <a href="rules/rule11_dueum_beopchik.html" class="rule-card group block bg-white border border-green-100 rounded-2xl p-6 border-b-4 border-b-green-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-md">RULE 11</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">😊</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-green-600 transition-colors">부끄럼쟁이 첫소리</h3>
+                    <p class="text-gray-500 font-medium text-sm">(두음 법칙)</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="bg-rose-500 text-white rounded-lg px-3 py-1 font-bold text-sm mr-3">4부</div>
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-rose-200 flex-grow pb-1">실전 받아쓰기</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <a href="rules/rule12_ttyeossuegi.html" class="rule-card group block bg-white border border-rose-100 rounded-2xl p-6 border-b-4 border-b-rose-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2 py-1 rounded-md">RULE 12</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">😮‍💨</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-rose-600 transition-colors">단어 숨쉬기</h3>
+                    <p class="text-gray-500 font-medium text-sm">(띄어쓰기)</p>
+                </a>
+                <a href="rules/rule13_ssangdungyi_moeum.html" class="rule-card group block bg-white border border-rose-100 rounded-2xl p-6 border-b-4 border-b-rose-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2 py-1 rounded-md">RULE 13</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">👯</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-rose-600 transition-colors">쌍둥이 모음</h3>
+                    <p class="text-gray-500 font-medium text-sm">(혼동하기 쉬운 모음)</p>
+                </a>
+                <a href="rules/rule14_sori_pyogi.html" class="rule-card group block bg-white border border-rose-100 rounded-2xl p-6 border-b-4 border-b-rose-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2 py-1 rounded-md">RULE 14</span>
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">👕</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-rose-600 transition-colors">소리 옷, 진짜 옷</h3>
+                    <p class="text-gray-500 font-medium text-sm">(소리와 표기)</p>
+                </a>
+            </div>
+        </section>
 
     </main>
 </body>
